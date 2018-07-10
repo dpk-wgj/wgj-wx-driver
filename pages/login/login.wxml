@@ -1,0 +1,36 @@
+<view class="main">
+    <view class="container">
+      <view class="user-info">
+
+      <block>
+          <open-data class="avatar" type="userAvatarUrl"></open-data>
+      </block>
+          <open-data class="text" type="userNickName"></open-data>
+          <!-- <text>{{userInfo.nickName}}</text> -->
+      </view>
+      <!-- <block wx:if="{{userInfo.avatarUrl != ''}}">
+      <view class="my-wallet tapbar" bindtap="movetoWallet">
+          <text>我的钱包</text>
+          <text>></text>
+      </view>
+      </block> -->
+      <button bindtap="bindAction" class="btn-login" hover-class="gray" type="{{bType}}" >{{actionText}}</button>
+        <!-- <view class="hd">
+            <text class="login">短信登录</text>
+        </view>
+        <view class="bd">
+            <input type="text" class="bd-tel" value="{{phone}}" bindinput="phoneInput" placeholder="请输入手机号"
+                   placeholder-style="color:#999999"/>
+            <image class="bd-img" wx:if="{{phone.length>0}}" bindtap="deletePhone" src="../../assets/images/cancel.png"/>
+        </view>
+        <view class="hd">
+            <button class="didi-btn next-step" disabled="{{nextBtnDisabled}}" bindtap="login"
+                    style="background-color: {{nextBtnBc}};color:#fff">下一步
+            </button>
+            <button class="didi-btn wx-login-btn" bindtap="wxLogin" bindgetuserinfo="onGotUserInfo" open-type='getUserInfo'
+                    style="background-color: #000 ;color:#fff">使用微信登录
+            </button>
+        </view> -->
+
+    </view>
+</view>

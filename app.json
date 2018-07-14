@@ -1,7 +1,12 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/user/user",
+    "pages/orderEnd/orderEnd",
+    "pages/orderDetail/orderDetail",
+    "pages/orderService/orderService",
     "pages/ws/ws",
+    "pages/orderList/orderList",
     "pages/authorization/authorization",
     "pages/login/login",
     "pages/logs/logs",
@@ -12,7 +17,6 @@
     "pages/order/order",
     "pages/orderClosed/orderClosed",
     "pages/cancel/cancel",
-    "pages/orderService/orderService",
     "pages/evaluation/evaluation"
   ],
   "window": {

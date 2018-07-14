@@ -1,0 +1,28 @@
+@import '../../styles/driver.wxss';
+@import '../../styles/didi-ft.wxss';
+page{
+  background: rgb(242, 243, 245); 
+}
+.order{
+  height: 100px;
+  padding: 20px 100rpx;
+  color: rgb(100, 100, 100);
+  font-size: 35rpx;
+  background: #fff;
+}
+.order .o{
+  padding-top: 7px;
+}
+.btn{
+  background: #fff;
+  height: 50px;
+}
+.btn text{
+  position: absolute;
+  right: 50rpx;
+  width: 20%;
+  height: 30px;
+  font-size: 30rpx;
+  color: rgb(150, 150, 150);
+  line-height: 30px;
+} 

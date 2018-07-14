@@ -1,4 +1,9 @@
 import util from './utils/index';
+var QQMapWX = require('libs/qqmap-wx-jssdk.js');
+var qqmapsdk;
+qqmapsdk = new QQMapWX({
+  key: 'DHNBZ-2ZLKK-T7IJJ-AXSQW-WX5L6-A6FJZ'
+});
 App({
   onLaunch: function () {
     // 展示本地存储能力
@@ -17,25 +22,20 @@ App({
             console.log("登录：", res1)
             this.globalData.openid = res1.openid
             let param = {
-              driverWxId: this.globalData.openid,
+              driverWxId: "yjq",//this.globalData.openid,
               // driverName: 
             }
             util.request({
-              url: 'http://localhost:8000/public/driver/login',
+              url: `${this.globalData.baseUrl}/public/driver/login`,
               method: "post",
               data: param
             }).then(res2 => {
-              console.log("后台请求登录：", res2)
-              util.request({
-                url: "http://localhost:8000/api/getUserInfoById",
-                method: "post",
-                data: {
-                  "userId": 4
-                }
-              }).then(res => {
-                console.log(res)
-              })
+              if (res2.status === 1) {
+                
+                this.globalData.driverInfo = res2.result.driverInfo
+                console.log("后台请求登录：", this.globalData.driverInfo)
 
+              }
             })
  
           }
@@ -45,10 +45,15 @@ App({
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
       }
     })
+
     // 获取用户信息
   },
   globalData: {
-    userInfo: null,
+    baseUrl: 'http://10.30.210.117:8000',
+    baseWsUrl: 'ws://10.30.210.117:8000',
+    userInfo: null, 
+    socketOpen: false,
+    socketMsgQueue: [],
     bluraddress: '范家新村-公交站',
     destination: '',
     id: '快车',

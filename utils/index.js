@@ -4,16 +4,12 @@ let DEFAULT_REQUEST_OPTIONS = {
     url: '',
     data: {},
     header:{
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
     },
     method: 'GET',
     dataType: 'json'
 }
-let token = null
-if(wx.getStorageSync('token')){
-  token = wx.getStorageSync('token')
-  DEFAULT_REQUEST_OPTIONS.header.token = token
-}
+console.log("配置", DEFAULT_REQUEST_OPTIONS.header)
 let util = {
     request(opt){
         // 生成对象 结构
@@ -38,7 +34,7 @@ let util = {
                 success(res) {
                   if (res.header.refresh) {
                     wx.setStorageSync('token', res.header.refresh)
-                    console.log('token',wx.getStorageSync('token'))
+                    DEFAULT_REQUEST_OPTIONS.header.token = res.header.refresh
                   }
                   resolve(res.data)
                 },

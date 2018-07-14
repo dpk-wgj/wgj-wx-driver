@@ -1,0 +1,43 @@
+<view class="main">
+    <view class="bd" wx:for="{{10}}" wx:key="i" wx:for-index="index">
+      <view class="total">
+          <view class="total-time">
+              <view class="img">
+                  <image src="../../assets/images/clock.png"></image>
+              </view>
+              <text class="time">{{orderList[0].startTime}}</text>
+          </view>
+          <view class="total-start">
+              <view class="start-pic"></view>
+              <text class="desc">{{orderList[0].startLoc}}</text>
+          </view>
+          <view class="total-end">
+              <view class="end-pic"></view>
+              <text class="desc">{{orderList[0].endLoc}}</text>
+          </view>
+          
+          <view class="total-state" bindtap="toRules">
+              已完成 >
+          </view>
+      </view>
+    <!-- <view class="content">
+        <view class="content-img">
+            <image src="../../assets/images/warn.png"/>
+        </view>
+        <view class="content-desc">
+            司机接单后2分钟内免费取消
+        </view>
+        <view class="content-rules" bindtap="toRules">
+            取消规则 >
+        </view>
+    </view> -->
+    </view>
+
+</view>
+
+<view class="ft">
+    <view class="cancel" bindtap="toHelp">需要帮助</view>
+    <navigator url= "/pages/index/index" redirect > 
+        <view class="notcarpool" >返回首页</view>
+      </navigator>
+</view>

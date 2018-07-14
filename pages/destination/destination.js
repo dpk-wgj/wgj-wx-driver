@@ -15,17 +15,17 @@ onLoad(){
   this.requestHistory();
 },
 requestHistory(e){
-  util.request({
-      url: 'https://www.easy-mock.com/mock/5aded45053796b38dd26e970/comments#!method=get',
-      mock: false,
-    }).then((res)=>{
+  // util.request({
+  //     url: 'https://www.easy-mock.com/mock/5aded45053796b38dd26e970/comments#!method=get',
+  //     mock: false,
+  //   }).then((res)=>{
  
-      const entity = res.data.entity;
+  //     const entity = res.data.entity;
   
-      this.setData({
-        entity
-      })
-    })
+  //     this.setData({
+  //       entity
+  //     })
+  //   })
   },
   toIndex(e){
     const destination = e.currentTarget.dataset.destination;

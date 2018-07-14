@@ -9,81 +9,132 @@ const app = getApp();
 Page({
   data: {
     scale: 14,
-    hiddenLoading:false
+    hiddenLoading:false,
+    bottomText: '到达上车地点',
+    isAccessPassenger: false,
+    socktBtnTitle: '连接socket'
   },
-  onLoad: function () {
 
-    let { bluraddress,strLatitude,strLongitude,endLatitude,endLongitude} = app.globalData
-    this.setData({
-      markers: [{
-        iconPath: "../../assets/images/str.png",
-        id: 0,
-        latitude: strLatitude,
-        longitude:strLongitude,
-        width: 30,
-        height: 30
-      },{
-        iconPath: "../../assets/images/end.png",
-        id: 0,
-        latitude: endLatitude,
-        longitude:endLongitude,
-        width: 30,
-        height: 30
-      }],
-      polyline: [{
-        points: [{
-          longitude: strLongitude,
-          latitude: strLatitude
-        }, {
-          longitude:endLongitude,
-          latitude:endLatitude
-        }],
-        color:"red",
-        width: 4,
-        dottedLine: true
-      }],
-  
-    });
-   
-  wx.getSystemInfo({
-    success: (res)=>{
-      this.setData({
-        controls:[{
-          id: 1,
-          iconPath: '../../assets/images/mapCart.png',
-          position: {
-            left: res.windowWidth/2 - 11,
-            top: res.windowHeight/2 - 60,
-            width: 22,
-            height: 45
-            },
-          clickable: true
-        },{
-          id: 2,
-          iconPath: '../../assets/images/location.png',
-          position: {
-            left: 20, // 单位px
-            top: res.windowHeight -150, 
-            width: 40, // 控件宽度/px
-            height: 40,
-            },
-          clickable: true
-        },{
-          id: 3,
-          iconPath: '../../assets/images/walk.png',
-          position: {
-            left: 20, // 单位px
-            top: res.windowHeight -200, 
-            width: 40, // 控件宽度/px
-            height: 40,
-            },
-          clickable: true
-        }],
-     
+  /**
+   * 使用websocket连接
+   */
+  //事件处理函数
+  bindViewTap: function () {
+    wx.navigateTo({
+      url: '../logs/logs'
+    })
+  },
+  sendSocketMessage: function (msg) {
+    console.log("哈哈哈哈哈")
+
+    if (app.globalData.socketOpen) {
+      wx.sendSocketMessage({
+        data: msg
       })
+    } else {
+      app.globalData.socketMsgQueue.push(msg)
     }
-  })
+  },
+  onLoad: function (option) {
+    //后台websocket传过来的乘客Id
+    let passengerInfo = app.globalData.passengerInfo
+    let orderInfo = app.globalData.currOrderInfo
+
+    console.log("司机拿到的乘客信息和订单信息：", passengerInfo,orderInfo)
+    this.setData({
+      hiddenLoading:true,
+      passengerInfo: passengerInfo,
+      orderInfo: orderInfo
+    })
+    // socket接收
+    wx.onSocketMessage(function (res) {
+      res = JSON.parse(res.data)
+      console.log('收到服务器内容：' + res.status)
+      // res.status === 3  取消订单
+      if (res.status === 3) {
+        console.log("乘客已经取消了订单")
+        wx.showToast({
+          title: '乘客已经取消了订单',
+          icon: 'fail',
+          mask: true,
+          duration: 1000
+        })
+        wx.redirectTo({
+          url: '/pages/index/index',
+        })
+      }
+    })
+    // let { bluraddress,strLatitude,strLongitude,endLatitude,endLongitude} = app.globalData
+    // this.setData({
+    //   markers: [{
+    //     iconPath: "../../assets/images/str.png",
+    //     id: 0,
+    //     latitude: strLatitude,
+    //     longitude:strLongitude,
+    //     width: 30,
+    //     height: 30
+    //   },{
+    //     iconPath: "../../assets/images/end.png",
+    //     id: 0,
+    //     latitude: endLatitude,
+    //     longitude:endLongitude,
+    //     width: 30,
+    //     height: 30
+    //   }],
+    //   polyline: [{
+    //     points: [{
+    //       longitude: strLongitude,
+    //       latitude: strLatitude
+    //     }, {
+    //       longitude:endLongitude,
+    //       latitude:endLatitude
+    //     }],
+    //     color:"red",
+    //     width: 4,
+    //     dottedLine: true
+    //   }],
   
+    // });
+   
+    wx.getSystemInfo({
+      success: (res)=>{
+        this.setData({
+          controls:[{
+            id: 1,
+            iconPath: '../../assets/images/mapCart.png',
+            position: {
+              left: res.windowWidth/2 - 11,
+              top: res.windowHeight/2 - 60,
+              width: 22,
+              height: 45
+              },
+            clickable: true
+          },{
+            id: 2,
+            iconPath: '../../assets/images/location.png',
+            position: {
+              left: 20, // 单位px
+              top: res.windowHeight -150, 
+              width: 40, // 控件宽度/px
+              height: 40,
+              },
+            clickable: true
+          },{
+            id: 3,
+            iconPath: '../../assets/images/walk.png',
+            position: {
+              left: 20, // 单位px
+              top: res.windowHeight -200, 
+              width: 40, // 控件宽度/px
+              height: 40,
+              },
+            clickable: true
+          }],
+      
+        })
+      }
+    })
+
   },
   navigate(e){
     wx.openLocation({
@@ -108,59 +159,101 @@ Page({
     this.movetoPosition();
   },
   requesDriver(){
-    util.request({
-      url: 'https://www.easy-mock.com/mock/5aded45053796b38dd26e970/comments#!method=get',
-      mock: false,
-    }).then((res)=>{
-      
-      const drivers = res.data.drivers
-      const driver = drivers[Math.floor(Math.random()*drivers.length)];
-      wx.setStorage({
-        key:"driver",
-        data:driver
-      });
-      this.setData({
-        hiddenLoading:true,
-        driver:driver
-      })
-    })
-      // this.setData({
-      //   hiddenLoading:true,
-      //   // driver:driver
-      // })
   },
   bindcontroltap: (e)=>{
     console.log("hello")
     this.movetoPosition();
   },
-  onReady(){
-   
-  },
-  movetoPosition: function(){
-    this.mapCtx.moveToLocation();
-  },
- 
-  bindregionchange: (e)=>{
+  changeDriver(e){
+
+    let params = 3
+    util.request({
+      url: `${app.globalData.baseUrl}/api/driver/updateOrderInfoByOrderId`,
+      method: 'post',
+      data: params
+    }).then(res => {
+      console.log("申请改派：", res)
+      if (res.status === 1) {
+        wx.redirectTo({
+          url: "/pages/index/index"
+        })
+      }
+    })
 
   },
-  toCancel(){
-    wx.redirectTo({
-      url: "/pages/cancel/cancel"
-    })
-   
+  changeState(e){
+    let _this = this
+    let userId = app.globalData.driverInfo.driverId
+    if (!this.data.isAccessPassenger) {//到乘客上车点（接到乘客）
+    
+      _this.sendSocketMessage('driver,arriveToPassenger')
+
+      let params = {
+        orderId: 3,
+        currentLocation: '1,1',
+        targetLocation: '1,1'
+      }
+      util.request({
+        url: `${app.globalData.baseUrl}/api/driver/accessToServiceForDriver`,
+        method: 'post',
+        data: params
+      }).then(res => {
+        console.log("接到乘客：", res)
+        if (res.status === 1) {
+          this.setData({
+            bottomText: '到达目的地',
+            isAccessPassenger: true
+          })
+          wx.showToast({
+            title: '您已成功接到乘客',
+            icon: 'success',
+            duration: 3000
+          })
+        }
+      })
+
+    }else{//到达目的地
+
+      _this.sendSocketMessage('driver,arriveToDest')
+
+      wx.onSocketMessage(function (res) {
+        res = JSON.parse(res.data)
+        // res.status === 2  取消订单
+        console.log('收到服务器内容：' + res.data)
+      })
+
+      let params = {
+        orderId: 3,
+        currentLocation: '1,1',
+        targetLocation: '1,1'
+      }
+
+      util.request({
+        url: `${app.globalData.baseUrl}/api/driver/arrivedTargetLocation`,
+        method: 'post',
+        data: params
+      }).then(res => {
+        console.log("到达目的地：", res)
+        if (res.status === 1) {
+          wx.redirectTo({
+            url: "/pages/orderEnd/orderEnd",
+          })
+        }
+      })
+    }
   },
-  toApp(){
-    wx.showToast({
-      title: '暂不支持',
-      icon: 'success',
-      duration: 1000
+  endOrder(){
+    wx.closeSocket({
+      success: function(res){
+        console.log("关闭了socket",res)
+      },
+      complete: function (res) {
+        console.log("关闭了socket", res)
+      },
     })
-  },
-  toEvaluation(){
     wx.redirectTo({
       url:"/pages/evaluation/evaluation",
-    })
-  },
+    })  },
   onReady: function () {
     wx.getLocation({
       type: "gcj02",
@@ -170,8 +263,40 @@ Page({
           latitude: res.latitude
         })
       }
-      })
+    })
      
+  },
+  movetoPosition: function () {
+    this.mapCtx.moveToLocation();
+  },
+
+  bindregionchange: (e) => {
+
+  },
+  toCancel() {
+    wx.redirectTo({
+      url: "/pages/cancel/cancel"
+    })
+  },
+  // 拨打电话
+  calling: function () {
+    wx.makePhoneCall({
+      // phoneNumber: this.phone,
+      phoneNumber: "12345678900",
+      success: function () {
+        console.log("拨打电话成功")
+      },
+      fail: function () {
+        console.log("拨打电话失败")
+      }
+    })
+  },
+  toApp() {
+    wx.showToast({
+      title: '暂不支持',
+      icon: 'success',
+      duration: 1000
+    })
   },
 
   

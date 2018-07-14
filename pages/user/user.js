@@ -1,115 +1,109 @@
-// pages/my/index.js
+// pages/login/login.js
+const app = getApp()
 Page({
-  data:{
-    // 用户信息
-    userInfo: {
-      avatarUrl: "",
-      nickName: "未登录"
-    },
-    bType: "primary", // 按钮类型
-    actionText: "登录", // 按钮文字提示
-    lock: false //登录按钮状态，false表示未登录
-  },
-// 页面加载
-  onLoad:function(){
-    // 设置本页导航标题
-    wx.setNavigationBarTitle({
-      title: '个人中心'
-    })
-    // 获取本地数据-用户信息
-    wx.getStorage({
-      key: 'userInfo',
-      // 能获取到则显示用户信息，并保持登录状态，不能就什么也不做
-      success: (res) => {
-        wx.hideLoading();
-        let p = this.globalData.userInfo
 
-        this.setData({
-          userInfo: p,
-          // {
-          //   avatarUrl: res.data.userInfo.avatarUrl,
-          //   nickName: res.data.userInfo.nickName
-          // },
-          bType: res.data.bType,
-          actionText: res.data.actionText,
-          lock: true
-        })
+  /**
+   * 页面的初始数据
+   */
+  data: {
+    nextBtnDisabled: true,
+    nextBtnBc: '#bcbcbc',
+    phone: ''
+  },
+  onLoad: function () {
+    let userInfo = app.globalData.userInfo
+    this.setData({
+      userInfo: userInfo
+    })
+
+  },
+  testPhone: function (s) {
+    if (s != null && s) {
+      var length = s.length
+      if (length = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1}))+\d{8})$/.test(s)) {
+        return true
+      } else {
+        return false
       }
-    });
+    }
   },
-// 登录或退出登录按钮点击事件
-  bindAction: function(){
-    this.data.lock = !this.data.lock
-    // 如果没有登录，登录按钮操作
-    if(this.data.lock){
-      wx.showLoading({
-        title: "正在登录"
-      });
-      wx.login({
-        success: (res) => {
-          wx.hideLoading();
-          wx.getUserInfo({
-            withCredentials: false,
-            success: (res) => {
-              this.setData({
-                userInfo: {
-                  avatarUrl: res.userInfo.avatarUrl,
-                  nickName: res.userInfo.nickName
-                },
-                bType: "warn",
-                actionText: "退出登录"
-              });
-              // 存储用户信息到本地
-              wx.setStorage({
-                key: 'userInfo',
-                data: {
-                  userInfo: {
-                    avatarUrl: res.userInfo.avatarUrl,
-                    nickName: res.userInfo.nickName
-                  },
-                  bType: "warn",
-                  actionText: "退出登录"
-                },
-                success: function(res){
-                  console.log("存储成功")
-                }
-              })
-            }     
-          })
-        }
+  // 输入手机号事件
+  phoneInput: function (e) {
+    var _self = this
+    _self.setData({ phone: e.detail.value })
+    var isPhone = _self.testPhone(e.detail.value)
+    if (isPhone) {
+      _self.setData({
+        nextBtnDisabled: false,
+        nextBtnBc: '#4a4c5b'
       })
-    // 如果已经登录，退出登录按钮操作     
-    }else{
-      wx.showModal({
-        title: "确认退出?",
-        content: "退出后将不能使用ofo",
-        success: (res) => {
-          if(res.confirm){
-            console.log("确定")
-            // 退出登录则移除本地用户信息
-            wx.removeStorageSync('userInfo')
-            this.setData({
-              userInfo: {
-                avatarUrl: "",
-                nickName: "未登录"
-              },
-              bType: "primary",
-              actionText: "登录"
-            })
-          }else {
-            console.log("cancel")
-            this.setData({
-              lock: true
-            })
-          }
-        }
+    } else {
+      _self.setData({
+        nextBtnDisabled: true,
+        nextBtnBc: '#bcbcbc'
       })
-    }   
+    }
   },
-// 跳转至钱包
-  movetoWallet: function(){
+  // 清空手机号
+  deletePhone: function () {
+    console.log("a")
+    this.setData({ phone: '' })
+  },
+  // 登录
+  login: function () {
+    app.globalData.userInfo = { phone: this.data.phone }
     wx.navigateTo({
-      url: '../wallet/index'
+      url: '/pages/index/index',
+    })
+  },
+  // function login(){
+  //   return 
+  // }
+
+  // function getUserInfo() {
+  //   return new Promise((resolve, reject) => wx.login({
+  //     success: resolve,
+  //     fail: reject
+  //   })).then(res => new Promise((resolve, reject) =>
+  //       wx.getUserInfo({
+  //         success: resolve,
+  //         fail: reject
+  //       })
+  //     ))
+  //   }
+  // 登录
+  onGotUserInfo: function (e) {
+    console.log(e.detail.errMsg)
+    console.log(e.detail.userInfo)
+    console.log(e.detail.rawData)
+  },
+  wxLogin: function () {
+    wx.login({
+      success: function (res) {
+        console.log("登录状态码：", res)
+        if (res.code) {
+          //发起网络请求
+          wx.getUserInfo({
+            success: function (res) {
+              console("!!!", res.userInfo)
+            }
+          })
+          wx.request({
+            url: 'https://test.com/onLogin',
+            data: {
+              code: res.code
+            }
+          })
+
+        } else {
+          console.log('登录失败！' + res.errMsg)
+        }
+      }
+
+    });
+    wx.navigateTo({
+      url: '/pages/index/index',
     })
   }
+
 })

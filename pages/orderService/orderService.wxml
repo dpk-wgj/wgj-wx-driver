@@ -16,14 +16,12 @@
                     <cover-image style="width: 150rpx;height: 150rpx;"src="../../assets/images/driver.png"/>
                 </cover-view>
                 <cover-view class="driver-detailed" >
-                    <cover-view class="detailed-name">乘客姚</cover-view>
+                    <cover-view class="detailed-name">{{passengerInfo.passengerWxId}}</cover-view>
+                    <cover-view class="detailed-name">目的地：{{orderInfo.startLocation}}</cover-view>
                 </cover-view>
             </cover-view>
             <cover-view class="driver-message">
-                    <cover-view class="mas">
-                            <cover-image style="width: 70rpx;height: 70rpx;" src="../../assets/images/msm.png"/>
-                        </cover-view>
-                        <cover-view class="phone">
+                        <cover-view class="phone" bindtap='calling'>
                             <cover-image style="width: 70rpx;height: 70rpx; margin-right: 50rpx;" src="../../assets/images/phone.png"/>
                         </cover-view>
 
@@ -44,15 +42,15 @@
 
 
     </cover-view>
-     <cover-view class="ft">
-        <cover-view class="ft-cancel"bindtap="toCancel">服务改派</cover-view>
-        <cover-view class="ft-help" bindtap="toEvaluation">结束行程</cover-view>
+     <cover-view class="ft" hidden='{{isAccessPassenger}}'>
+        <cover-view class="ft-cancel"bindtap="changeDriver">服务改派</cover-view>
+        <cover-view class="ft-help" bindtap="endOrder">结束行程</cover-view>
         <cover-view class="ft-app" bindtap="toApp">下载滴滴APP</cover-view>
     </cover-view> 
 
     <cover-view class="arrive-dest">
         <cover-view class="arr">>></cover-view>
-        <cover-view class="text" bindtap="toEvaluation">到达上车地点</cover-view>
+        <cover-view class="text" bindtap="changeState">{{bottomText}}</cover-view>
     </cover-view>
     <!-- <cover-view class="ft">
         <cover-view class="ft-help" bindtap="toEvaluation">到达上车地点</cover-view>

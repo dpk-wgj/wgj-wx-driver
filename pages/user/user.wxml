@@ -1,16 +1,39 @@
-<!--pages/my/index.wxml-->
 <view class="container">
-    <view class="user-info">
-    <block wx:if="{{userInfo.avatarUrl != ''}}">
-        <image src="{{userInfo.avatarUrl}}"></image>
-    </block>
-        <text>{{userInfo.nickName}}</text>
+  <view class="header">
+    <!-- <navigator url='../information/information'> -->
+      <view class='user-nav'>
+            <open-data class="avatar" type="userAvatarUrl"></open-data>
+            <open-data class="text" type="userNickName"></open-data>
+            <!-- <text>{{userInfo.nickName}}</text> -->
+      </view>
+    <!-- </navigator> -->
+  </view>
+  <view class="content">
+    <navigator url='/pages/orderList/orderList'>
+      <view class="collection con">
+        <view class='collection-icon icon'>
+          <image src='../../assets/images/order.png' mode='aspectFit'></image>
+        </view>
+        <view class='collection-title title'>订单</view>
+        <view class='collection-img img'>
+          <image src='../../assets/images/more.png' mode='aspectFit'></image>
+        </view>
+      </view>
+    </navigator>
+    <navigator url='/pages/message/message'>
+    <view class="footprint con">
+      <view class='footprint-icon icon'>
+        <image src='../../assets/images/message.png' mode='aspectFit'></image>
+      </view>
+      <view class='footprint-title title'>消息</view>
+      <view class='footprint-img img'>
+        <image src='../../assets/images/more.png' mode='aspectFit'></image>
+      </view>
     </view>
-    <block wx:if="{{userInfo.avatarUrl != ''}}">
-    <view class="my-wallet tapbar" bindtap="movetoWallet">
-        <text>我的钱包</text>
-        <text>></text>
-    </view>
-    </block>
-    <button bindtap="bindAction" class="btn-login" hover-class="gray" type="{{bType}}" >{{actionText}}</button>
+    </navigator>
+     
+  </view>
+  <view class="ft">
+          <button>退出登录</button>
+      </view>
 </view>

@@ -21,6 +21,7 @@ Page({
         index: '',
     },
     onLoad: function(options) {
+      console.log("index.js")
       if (!wx.getStorageSync('userInfo')){
         wx.redirectTo({
           url: '/pages/authorization/authorization',
@@ -29,22 +30,12 @@ Page({
       this.requestCart();
       this.requestWaitingtime();
     },
-    requestCart(e){
-        util.request({
-            url: 'https://www.easy-mock.com/mock/5aded45053796b38dd26e970/comments#!method=get',
-            mock: false,
-          }).then((res)=>{
-       
-            const navData = res.data.navData;
-            const imgUrls = res.data.imgUrls;
-            const cost = res.data.cost
-            this.setData({
-                navData,
-                imgUrls,
-                cost
-            })
-          })
+    getOrderList(e){
+      wx.redirectTo({
+        url: '/pages/orderList/orderList',
+      })
     },
+    requestCart(e){},
     onShow(){
         this.setData({
           
@@ -53,30 +44,27 @@ Page({
             currentTab:app.globalData.id,
         })
     },
-    requestWaitingtime(){
-        setTimeout(() => {
-            util.request({
-                url: 'https://www.easy-mock.com/mock/5aded45053796b38dd26e970/comments#!method=get',
-                mock: false,
-                data: {
-                }
-              }).then((res)=>{
-              const arr = res.data.waitingTimes;
-            //   console.log(arr)
-                var index = Math.floor((Math.random()*arr.length));
-                // console.log(arr[index])
-                this.setData({
-                isLoading:false,
-                waitingTimes: arr[index]
-                })
-              })
-        }, 1000);
-    },
+    requestWaitingtime(){},
    
     startDrive(e){
+      let params = {
+        "driverId": app.globalData.driverId,
+        "driverWxId": app.globalData.driverWxId,
+        "driverStatus": 1
+      }
+      util.request({
+        url: `${app.globalData.baseUrl}/api/driver/updateApiDriverInfoByDriverId`,
+        data: params,
+        method: 'post'
+      }).then((res) => {
+        console.log(res)
+        if(res.status === 1){
+          wx.navigateTo({
+            url: "/pages/wait/wait",
+          })
 
-      wx.navigateTo({
-        url: "/pages/wait/wait",
+        }
+
       })
       // const destination =this.data.destination
       // if(destination==''){
@@ -161,16 +149,6 @@ Page({
             currentTab: cur,
             navScrollLeft: (cur - 1) * singleNavWidth
         });
-    },
-    showUser(){
-    // 如果全局未存手机号进入登录页
-    if(app.globalData.userInfo && app.globalData.userInfo.phone){
-        return
-    }else{
-        wx.navigateTo({
-        url:  "/pages/login/login",
-        })
-    }
     },
     onChange(e){
         const currentCost = e.target.dataset.index;

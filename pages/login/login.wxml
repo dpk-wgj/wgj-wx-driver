@@ -2,9 +2,9 @@
     <view class="container">
       <view class="user-info">
 
-      <block>
-          <open-data class="avatar" type="userAvatarUrl"></open-data>
-      </block>
+        <block>
+            <open-data class="avatar" type="userAvatarUrl"></open-data>
+        </block>
           <open-data class="text" type="userNickName"></open-data>
           <!-- <text>{{userInfo.nickName}}</text> -->
       </view>

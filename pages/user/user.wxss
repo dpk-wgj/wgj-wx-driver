@@ -1,9 +1,22 @@
-/* pages/my/index.wxss */
-.user-info{
-	background-color: #fff;
-	padding-top: 60rpx;
+@import '../../styles/didi-ft.wxss';
+page{
+  font-size: 35rpx;
+  background: #f4f6f8;
 }
-.user-info image{
+.header{
+  height: 300rpx;
+   background: #fff; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+  border-bottom: 1px solid #fff;
+  margin-bottom: 10px; 
+  box-shadow: 0px 4px 5px#e0e0e0;
+}
+.header .avatar{
+  overflow: hidden;
 	display: block;
 	width: 180rpx;
 	height: 180rpx;
@@ -11,19 +24,55 @@
 	margin: 0 auto 40rpx;
 	box-shadow: 0 0 20rpx rgba(0,0,0,.2)
 }
-.user-info text{
-	display: block;
-	text-align: center;
-	padding: 30rpx 0;
-	margin-bottom: 30rpx;
+.header .user-nav{
+  text-align: center;
+  height: 270rpx;
+}  
+
+.content .con{
+  display: flex;
+  line-height: 90rpx;
+  height: 90rpx;
+  background: white;
+  padding-left: 15rpx;
+  border-bottom: 1rpx solid #ECECEC;
 }
-.btn-login{
-	position: absolute;
-	bottom: 60rpx;
-	width: 90%;
-	left: 50%;
-	margin-left: -45%;
+.content .con .icon image{
+  width: 40rpx;
+  height: 30rpx;
+  padding-top: 20rpx;
 }
-.gray{
-	background-color: #ccc;
+.content .con .title{
+  padding-left: 10rpx;
+}
+.content .con .img{
+  padding-top: 10rpx;
+  padding-left: 505rpx;
+}
+.content .con .img image{
+  height: 40rpx;
+  width: 30rpx;
+}
+.content .coupon .coupon-img{
+   padding-left: 470rpx; 
+}
+.content .address .address-img{
+   padding-left: 470rpx; 
+}
+.content .collection .collection-img{
+   padding-left: 540rpx; 
+}
+.content .footprint .footprint-img{
+   padding-left: 540rpx; 
+}
+.content .signOut{
+  margin-top: 20rpx;
+  text-align: center;
+  line-height: 70rpx;
+  height: 70rpx;
+  background: white;
+}
+.ft button{
+  background: #000;
+  color: #fff;
 }

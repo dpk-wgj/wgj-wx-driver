@@ -1,0 +1,49 @@
+ <view class="container">
+  <view class="total">
+        <view class="total-driver">
+            <view class="driver-info">
+                <view class="driver-img">
+                    <image style="width: 150rpx;height: 150rpx;"src="../../assets/images/driver.png"/>
+                </view>
+                <view class="driver-detailed" >
+                    <view class="detailed-name">{{driver.name}}
+                    </view>
+                   
+                    <view class="detailed-Cartnumber">{{driver.Cartnumber}}</view>
+
+                    <view class="detailed-cart">{{driver.cart}}</view>
+                </view>
+            </view>
+            <view class="driver-message">
+                    <view class="mas">
+                            <image style="width: 70rpx;height: 70rpx;" src="../../assets/images/msm.png"/>
+                        </view>
+                        <view class="phone">
+                            <image style="width: 70rpx;height: 70rpx;" src="../../assets/images/phone.png"/>
+                        </view>
+            </view>
+          
+        </view>
+        <view class="main">
+          <view class='main-txt'>
+            <text>本次行程已结束</text>
+          </view>
+          <view class='obvious'>
+            <navigator url='/pages/orderDetail/orderDetail'>
+              <text class="obvious">产看明细 ></text>
+            </navigator>
+          </view>
+        </view>
+        </view>
+
+        <navigator url='/pages/index/index'>
+
+          <view class="toIndex">
+              <view class="text">返回首页</view>
+          </view>
+        </navigator>
+        <!-- <view class="ft">
+            <view class="cancel">需要帮助</view>
+            <view class="notcarpool" bindtap="toIndex">结束行程</view>
+        </view> -->
+</view>

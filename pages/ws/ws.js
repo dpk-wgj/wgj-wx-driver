@@ -20,7 +20,7 @@ Page({
     })
     if (!socketOpen) {
       wx.connectSocket({
-        url: 'ws://127.0.0.1:8000/my-websocket'
+        url: 'ws://10.30.210.117:8000/public/my-websocket'
       })
       wx.onSocketError(function (res) {
         socketOpen = false

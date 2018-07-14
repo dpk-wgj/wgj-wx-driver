@@ -1,5 +1,6 @@
 var util = require('../../utils/util.js');
 const app = getApp()
+
 Page({
   data: {
   progress_txt: '已等待', 
@@ -12,11 +13,68 @@ parseTime: function(time){
     return time[1]?time:'0'+time;
 },
 
+onLoad: function(){
 
+  let _this = this
+
+    /**
+     * 连接websocket
+     */
+  let userId = app.globalData.driverInfo.driverId
+    wx.connectSocket({
+      url: `${app.globalData.baseWsUrl}/ws/driver/${userId}/0`
+    })
+    wx.onSocketError(function (res) {app
+      app.globalData.socketOpen = false
+      console.log('WebSocket连接打开失败，请检查！')
+    })
+    wx.onSocketOpen(function (res) {
+      console.log('WebSocket连接已打开！')
+      _this.sendSocketMessage('driver,toWait')
+      app.globalData.socketOpen = true
+      for (var i = 0; i < app.globalData.socketMsgQueue.length; i++) {
+        _this.sendSocketMessage(app.globalData.socketMsgQueue[i])
+      }
+      app.globalData.socketMsgQueue = []
+    })
+
+    wx.onSocketMessage(function (res) {
+      
+      console.log('收到服务器内容：', res)
+
+      res = JSON.parse(res.data)
+    
+      if (res.status === 1){
+        app.globalData.passengerInfo = res.result.passenger
+        app.globalData.currOrderInfo = res.result.order
+        // wx.closeSocket()
+        wx.redirectTo({
+          url: `/pages/orderService/orderService`,
+        })
+      }
+    })
+    wx.onSocketClose(function (res) {
+      app.globalData.socketOpen = false
+      console.log('WebSocket 已关闭！')
+    })
+},
+
+sendSocketMessage: function (msg) {
+  if (app.globalData.socketOpen) {
+    wx.sendSocketMessage({
+      data: msg
+    })
+  } else {
+    app.globalData.socketMsgQueue.push(msg)
+  }
+},
+onUnload: function(){
+  clearInterval(this.countTimer)
+},
 countInterval: function () {
    var curr = 0;
     var timer = new Date(0,0);
-    var  randomTime = Math.floor(5*Math.random()) ;
+    var  randomTime = Math.floor(1000*Math.random()) ;
   this.countTimer = setInterval(() => {
     if (this.data.count <= randomTime) {
       this.setData({
@@ -38,7 +96,7 @@ countInterval: function () {
     }
   }, 1000)
 },
-  drawProgressbg: function(){
+drawProgressbg: function(){
    var ctx = wx.createCanvasContext('canvasProgressbg');
    ctx.setLineWidth(4);
    ctx.setStrokeStyle("#e5e5e5");

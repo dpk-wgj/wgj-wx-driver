@@ -8,7 +8,7 @@
     "pages/orderDetail/orderDetail",
     "pages/orderService/orderService",
     "pages/ws/ws",
-    
+    "pages/tel/tel",
     "pages/authorization/authorization",
     "pages/login/login",
     "pages/logs/logs",

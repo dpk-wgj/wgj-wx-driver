@@ -1,5 +1,6 @@
 <view class="main">
-    <view class="bd" wx:for="{{orderList}}" wx:key="i" wx:for-index="index">
+<scroll-view scroll-y>
+  <view class="bd" wx:for="{{orderList}}" wx:key="i" wx:for-index="index">
       <view class="total">
           <view class="total-time">
               <view class="img">
@@ -9,11 +10,11 @@
           </view>
           <view class="total-start">
               <view class="start-pic"></view>
-              <text class="desc">{{item.startLoc}}</text>
+              <text class="desc">{{item.startLocation}}</text>
           </view>
           <view class="total-end">
               <view class="end-pic"></view>
-              <text class="desc">{{item.endLoc}}</text>
+              <text class="desc">{{item.endLocation}}</text>
           </view>
           
           <view class="total-state" bindtap="toRules">
@@ -32,6 +33,8 @@
         </view>
     </view> -->
     </view>
+</scroll-view>
+    
 
 </view>
 

@@ -24,7 +24,8 @@ onLoad: function(){
     wx.connectSocket({
       url: `${app.globalData.baseWsUrl}/ws/driver/${userId}/0`
     })
-    if (app.globalData.socketOpen == false){
+    console.log(app.globalData.socketOpen)
+    if (!app.globalData.socketOpen){
       wx.onSocketError(function (res) {
         app
         app.globalData.socketOpen = false

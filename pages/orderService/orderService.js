@@ -36,105 +36,52 @@ Page({
     }
   },
   onLoad: function (option) {
+    var that = this
     //后台websocket传过来的乘客Id
     let passengerInfo = app.globalData.passengerInfo
     let orderInfo = app.globalData.currOrderInfo
 
-    console.log("司机拿到的乘客信息和订单信息：", passengerInfo,orderInfo)
-    this.setData({
-      hiddenLoading:true,
-      passengerInfo: passengerInfo,
-      orderInfo: orderInfo
-    })
-    // socket接收
-    wx.onSocketMessage(function (res) {
-      res = JSON.parse(res.data)
-      console.log('收到服务器内容：' + res.status)
-      // res.status === 3  取消订单
-      if (res.status === 3) {
-        console.log("乘客已经取消了订单")
-        wx.showToast({
-          title: '乘客已经取消了订单',
-          icon: 'fail',
-          mask: true,
-          duration: 1000
+    // 目的地转换为名称
+    let endStr = orderInfo.endLocation
+    let end = endStr.split(',')
+    let endLocation;
+    qqmapsdk.reverseGeocoder({
+      location: {
+        latitude: end[1],
+        longitude: end[0]
+      },
+      success: function (addressRes) {
+        endLocation = addressRes.result.formatted_addresses.recommend;
+        orderInfo.endLocation = endLocation;
+        console.log("司机拿到的乘客信息和订单信息：", passengerInfo, orderInfo)
+        that.setData({
+          hiddenLoading: true,
+          passengerInfo: passengerInfo,
+          orderInfo: orderInfo
         })
-        wx.redirectTo({
-          url: '/pages/index/index',
-        })
-      }
-    })
-    // let { bluraddress,strLatitude,strLongitude,endLatitude,endLongitude} = app.globalData
-    // this.setData({
-    //   markers: [{
-    //     iconPath: "../../assets/images/str.png",
-    //     id: 0,
-    //     latitude: strLatitude,
-    //     longitude:strLongitude,
-    //     width: 30,
-    //     height: 30
-    //   },{
-    //     iconPath: "../../assets/images/end.png",
-    //     id: 0,
-    //     latitude: endLatitude,
-    //     longitude:endLongitude,
-    //     width: 30,
-    //     height: 30
-    //   }],
-    //   polyline: [{
-    //     points: [{
-    //       longitude: strLongitude,
-    //       latitude: strLatitude
-    //     }, {
-    //       longitude:endLongitude,
-    //       latitude:endLatitude
-    //     }],
-    //     color:"red",
-    //     width: 4,
-    //     dottedLine: true
-    //   }],
-  
-    // });
-   
-    wx.getSystemInfo({
-      success: (res)=>{
-        this.setData({
-          controls:[{
-            id: 1,
-            iconPath: '../../assets/images/mapCart.png',
-            position: {
-              left: res.windowWidth/2 - 11,
-              top: res.windowHeight/2 - 60,
-              width: 22,
-              height: 45
-              },
-            clickable: true
-          },{
-            id: 2,
-            iconPath: '../../assets/images/location.png',
-            position: {
-              left: 20, // 单位px
-              top: res.windowHeight -150, 
-              width: 40, // 控件宽度/px
-              height: 40,
-              },
-            clickable: true
-          },{
-            id: 3,
-            iconPath: '../../assets/images/walk.png',
-            position: {
-              left: 20, // 单位px
-              top: res.windowHeight -200, 
-              width: 40, // 控件宽度/px
-              height: 40,
-              },
-            clickable: true
-          }],
-      
+        // socket接收
+        wx.onSocketMessage(function (res) {
+          res = JSON.parse(res.data)
+          console.log('收到服务器内容：' + res.status)
+          // res.status === 3  取消订单
+          if (res.status === 3) {
+            console.log("乘客已经取消了订单")
+            wx.showToast({
+              title: '乘客已经取消了订单',
+              icon: 'fail',
+              mask: true,
+              duration: 1000
+            })
+            wx.redirectTo({
+              url: '/pages/index/index',
+            })
+          }
         })
       }
     })
 
+    
+   
   },
   navigate(e){
     wx.openLocation({
@@ -164,6 +111,7 @@ Page({
     console.log("hello")
     this.movetoPosition();
   },
+  // 申请改派
   changeDriver(e){
     let _this = this
     wx.showModal({

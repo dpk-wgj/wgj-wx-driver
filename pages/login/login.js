@@ -54,17 +54,17 @@ Page({
       driverId: app.globalData.driverInfo.driverId,
       driverPhoneNumber: this.data.phone
     }
-    console.log(param)
-    // util.request({
-    //   url: `${app.globalData.baseUrl}/api/driver/bingDriverPhoneNumber`,
-    //   method: "post",
-    //   data: param
-    // }).then((res) => {
-    //   console.log(res)
-    //   wx.navigateTo({
-    //     url: '/pages/index/index',
-    //   })
-    // })
+    // console.log(param)
+    util.request({
+      url: `${app.globalData.baseUrl}/api/driver/bindDriverPhoneNumber`,
+      method: "post",
+      data: param
+    }).then((res) => {
+      // console.log(res)
+      wx.navigateTo({
+        url: '/pages/index/index',
+      })
+    })
     
   }
 

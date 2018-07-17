@@ -28,8 +28,6 @@ Page({
       if(res.status === 1){
         let orderList = res.result
         for(let item of orderList){
-          // item.startLoc = "丽水学院东校区"
-          // item.endLoc = "万地广场"
           item.startTime = this.startTimeFormat(item.startTime)
           if (item.orderStatus == 3) {     
             item.orderStatus = '已完成'
@@ -42,47 +40,14 @@ Page({
           }
           let startStr = item.startLocation
           let start = startStr.split(',')
+          item.startLocation = start[0]
           let endStr = item.endLocation
           let end = endStr.split(',')
-          qqmapsdk.reverseGeocoder({
-            location: {
-              latitude: start[1],
-              longitude: start[0]
-            },
-            success: function (addressRes) {
-              item.startLoc = addressRes.result.formatted_addresses.recommend;
-              // console.log('startLoc:',item.startLoc)
-              // qqmapsdk.reverseGeocoder({
-              //   location: {
-              //     latitude: end[1],
-              //     longitude: end[0]
-              //   },
-              //   success: function (addressRes) {
-              //     item.endLoc = addressRes.result.formatted_addresses.recommend;
-              //     console.log('endLoc:', item.endLoc)
-              //     that.setData({
-              //       orderList
-              //     })
-              //   },
-              // })
-            },
-          })
-          setTimeout(function(){
-            qqmapsdk.reverseGeocoder({
-              location: {
-                latitude: end[1],
-                longitude: end[0]
-              },
-              success: function (addressRes) {
-                item.endLoc = addressRes.result.formatted_addresses.recommend;
-                // console.log('endLoc:', item.endLoc)
-                that.setData({
-                  orderList
-                })
-              },
-            })
-          },1000)
+          item.endLocation = end[0]
         }
+        that.setData({
+          orderList: orderList
+        })
       }
     })
   },

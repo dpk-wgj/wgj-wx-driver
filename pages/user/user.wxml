@@ -34,6 +34,6 @@
      
   </view>
   <view class="ft">
-          <button>退出登录</button>
+          <button bindtap='toTel'>切换手机号</button>
       </view>
 </view>

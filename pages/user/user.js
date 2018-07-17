@@ -104,6 +104,12 @@ Page({
     wx.navigateTo({
       url: '/pages/index/index',
     })
+  },
+
+  toTel: function(){
+    wx.navigateTo({
+      url: '/pages/tel/tel',
+    })
   }
 
 })

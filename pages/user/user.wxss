@@ -18,8 +18,8 @@ page{
 .header .avatar{
   overflow: hidden;
 	display: block;
-	width: 180rpx;
-	height: 180rpx;
+	width: 140rpx;
+	height: 140rpx;
 	border-radius: 50%;
 	margin: 0 auto 40rpx;
 	box-shadow: 0 0 20rpx rgba(0,0,0,.2)

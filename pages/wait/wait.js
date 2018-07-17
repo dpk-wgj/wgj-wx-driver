@@ -24,19 +24,23 @@ onLoad: function(){
     wx.connectSocket({
       url: `${app.globalData.baseWsUrl}/ws/driver/${userId}/0`
     })
-    wx.onSocketError(function (res) {app
-      app.globalData.socketOpen = false
-      console.log('WebSocket连接打开失败，请检查！')
-    })
-    wx.onSocketOpen(function (res) {
-      console.log('WebSocket连接已打开！')
-      _this.sendSocketMessage('driver,toWait')
-      app.globalData.socketOpen = true
-      for (var i = 0; i < app.globalData.socketMsgQueue.length; i++) {
-        _this.sendSocketMessage(app.globalData.socketMsgQueue[i])
-      }
-      app.globalData.socketMsgQueue = []
-    })
+    if (app.globalData.socketOpen == false){
+      wx.onSocketError(function (res) {
+        app
+        app.globalData.socketOpen = false
+        console.log('WebSocket连接打开失败，请检查！')
+      })
+      wx.onSocketOpen(function (res) {
+        console.log('WebSocket连接已打开！')
+        _this.sendSocketMessage('driver,toWait')
+        app.globalData.socketOpen = true
+        for (var i = 0; i < app.globalData.socketMsgQueue.length; i++) {
+          _this.sendSocketMessage(app.globalData.socketMsgQueue[i])
+        }
+        app.globalData.socketMsgQueue = []
+      })
+    }
+    
 
     wx.onSocketMessage(function (res) {
       
@@ -128,6 +132,7 @@ drawProgressbg: function(){
     context.stroke();
     context.draw()
   },
+  // 取消 
   toCancel(){
     wx.showModal({
       content: '确定退出等待返回首页吗',

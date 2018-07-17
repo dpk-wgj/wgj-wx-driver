@@ -1,4 +1,5 @@
 // pages/login/login.js
+import util from '../../utils/index';
 const app = getApp()
 Page({
 
@@ -10,13 +11,7 @@ Page({
     nextBtnBc: '#bcbcbc',
     phone: ''
   },
-  onLoad: function () {
-    let userInfo = app.globalData.userInfo
-    this.setData({
-      userInfo: userInfo
-    })
 
-  },
   testPhone: function (s) {
     if (s != null && s) {
       var length = s.length
@@ -46,64 +41,31 @@ Page({
   },
   // 清空手机号
   deletePhone: function () {
-    console.log("a")
+    // console.log("a")
     this.setData({phone: ''})
   },
   // 登录
   login: function () {
-    app.globalData.userInfo = {phone: this.data.phone}
-    wx.navigateTo({
-      url: '/pages/index/index',
-    })
-  },
-  // function login(){
-  //   return 
-  // }
-
-// function getUserInfo() {
-//   return new Promise((resolve, reject) => wx.login({
-//     success: resolve,
-//     fail: reject
-//   })).then(res => new Promise((resolve, reject) =>
-//       wx.getUserInfo({
-//         success: resolve,
-//         fail: reject
-//       })
-//     ))
-//   }
-  // 登录
-  onGotUserInfo: function(e){
-    console.log(e.detail.errMsg)
-    console.log(e.detail.userInfo)
-    console.log(e.detail.rawData)
-  },
-  wxLogin: function () {
-    wx.login({
-      success: function (res) {
-        console.log("登录状态码：",res)
-        if (res.code) {
-          //发起网络请求
-          wx.getUserInfo({
-            success: function (res) {
-              console("!!!",res.userInfo)
-            }
-          })
-          wx.request({
-            url: 'https://test.com/onLogin',
-            data: {
-              code: res.code
-            }
-          })
-          
-        } else {
-          console.log('登录失败！' + res.errMsg)
-        }
-      }
-      
-    });
-    wx.navigateTo({
-      url: '/pages/index/index',
-    })
+    app.globalData.driverInfo.driverPhoneNumber = this.data.phone
+    // console.log(this.data.phone)
+    // console.log(app.globalData.userInfo.phone)
+    // console.log(app.globalData.userInfo)
+    let param = {
+      driverId: app.globalData.driverInfo.driverId,
+      driverPhoneNumber: this.data.phone
+    }
+    // console.log(param)
+    // util.request({
+    //   url: `${app.globalData.baseUrl}/api/driver/bindPassengerPhoneNumber`,
+    //   method: "post",
+    //   data: param
+    // }).then((res) => {
+      // console.log(res)
+      wx.navigateTo({
+        url: '/pages/index/index',
+      })
+    // })
+    
   }
 
 })

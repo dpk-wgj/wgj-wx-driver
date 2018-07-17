@@ -3,25 +3,19 @@
     <!-- scroll-left属性可以控制滚动条位置 -->
     <!-- scroll-with-animation滚动添加动画过渡 -->
     <view class="section">
-      <navigator url='/pages/user/user'>
-        <view class="nav-me">
+       <!-- <navigator url='/pages/user/user'>  -->
+        <view class="nav-me" bindtap='showUser'>
           <image src="../../assets/images/nav-me.png"/>
         </view>
-      </navigator>
-      <!-- <scroll-view scroll-x="true" class="nav" scroll-left="{{navScrollLeft}}" scroll-with-animation="{{true}}">
-          <block wx:for="{{navData}}" wx:for-index="id"  wx:for-item="navItem" wx:key="index">
-              <view class="nav-item {{currentTab == id ?'active':''}}"  data-name="{{navItem.name}}" data-current="{{id}}" bindtap="switchNav">{{navItem.name}}</view>
-          </block>        
-      </scroll-view> -->
-      <navigator url= "/pages/carts/carts" >
+       <!-- </navigator>  -->
+      <navigator url= "/pages/orderList/orderList" >
         <view class="nav-all">
           <image src="../../assets/images/nav-all.png"/>
         </view>
       </navigator>
     </view>
     <view class="content">
-        <button class="didi-btn"bindtap="startDrive">点击出车</button>
+        <button class="didi-btn" bindtap="startDrive">点击出车</button>
     </view>
 
-    <!-- 页面内容 --> 
 </view>

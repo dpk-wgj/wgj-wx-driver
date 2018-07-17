@@ -19,7 +19,7 @@ App({
           url: url
         }).then((res1) => {
           if(res1.openid){
-            console.log("登录：", res1)
+            // console.log("登录：", res1)
             this.globalData.openid = res1.openid
             let param = {
               driverWxId: "yjq",//this.globalData.openid,
@@ -33,7 +33,7 @@ App({
               if (res2.status === 1) {
                 
                 this.globalData.driverInfo = res2.result.driverInfo
-                console.log("后台请求登录：", this.globalData.driverInfo)
+                // console.log("后台请求登录：", this.globalData.driverInfo)
 
               }
             })
@@ -49,8 +49,8 @@ App({
     // 获取用户信息
   },
   globalData: {
-    baseUrl: 'http://10.30.210.117:8000',
-    baseWsUrl: 'ws://10.30.210.117:8000',
+    baseUrl: 'http://localhost:8000',
+    baseWsUrl: 'ws://localhost:8000',
     userInfo: null, 
     socketOpen: false,
     socketMsgQueue: [],
@@ -63,7 +63,7 @@ App({
     endLongitude: 0,
     play: '18.7',
     openid: "",
-    appid: 'wx5f7c16298c6dcf9f',//appid需自己提供，此处的appid我随机编写
-    secret: 'a4c87556f8c6dbee2e72e1115c636ab2',//secret需自己提供，此处的secret我随机编写
+    appid: 'wx8884af693e78552c',//appid需自己提供，此处的appid我随机编写
+    secret: '3df93d09a28a4d5fa9199088c89811f8',//secret需自己提供，此处的secret我随机编写
   }
 })

@@ -1,12 +1,14 @@
 {
   "pages": [
+    
     "pages/index/index",
     "pages/user/user",
+    "pages/orderList/orderList",
     "pages/orderEnd/orderEnd",
     "pages/orderDetail/orderDetail",
     "pages/orderService/orderService",
     "pages/ws/ws",
-    "pages/orderList/orderList",
+    
     "pages/authorization/authorization",
     "pages/login/login",
     "pages/logs/logs",

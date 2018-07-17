@@ -21,7 +21,7 @@ Page({
         index: '',
     },
     onLoad: function(options) {
-      console.log("index.js")
+      // console.log("index.js")
       if (!wx.getStorageSync('userInfo')){
         wx.redirectTo({
           url: '/pages/authorization/authorization',
@@ -29,6 +29,21 @@ Page({
       }
       this.requestCart();
       this.requestWaitingtime();
+    },
+    // 点击用户
+    showUser() {
+      // console.log(app.globalData.driverInfo.driverPhoneNumber)
+      // console.log(app.globalData.userInfo.captcha)
+      // 如果全局未存手机号进入登录页
+      if (app.globalData.driverInfo && app.globalData.driverInfo.driverPhoneNumber) {
+        wx.navigateTo({
+          url: "/pages/user/user",
+        })
+      } else {
+        wx.navigateTo({
+          url: "/pages/login/login",
+        })
+      }
     },
     getOrderList(e){
       wx.redirectTo({
@@ -38,7 +53,6 @@ Page({
     requestCart(e){},
     onShow(){
         this.setData({
-          
             address:app.globalData.bluraddress,
             destination:app.globalData.destination,
             currentTab:app.globalData.id,
@@ -46,26 +60,43 @@ Page({
     },
     requestWaitingtime(){},
    
+    // 点击出车
     startDrive(e){
-      let params = {
-        "driverId": app.globalData.driverId,
-        "driverWxId": app.globalData.driverWxId,
-        "driverStatus": 1
-      }
-      util.request({
-        url: `${app.globalData.baseUrl}/api/driver/updateApiDriverInfoByDriverId`,
-        data: params,
-        method: 'post'
-      }).then((res) => {
-        console.log(res)
-        if(res.status === 1){
-          wx.navigateTo({
-            url: "/pages/wait/wait",
-          })
-
+      if (app.globalData.driverInfo.driverPhoneNumber == null){
+        wx.showToast({
+          title: '未绑定手机号',
+          icon: 'none',
+          mask: true,
+          success: function (e) {
+            setTimeout(function () {
+              wx.redirectTo({
+                url: `/pages/login/login`,
+              })
+            }, 1000);
+          }
+        })
+      } else{
+        let params = {
+          "driverId": app.globalData.driverId,
+          "driverWxId": app.globalData.driverWxId,
+          "driverStatus": 1
         }
+        util.request({
+          url: `${app.globalData.baseUrl}/api/driver/updateApiDriverInfoByDriverId`,
+          data: params,
+          method: 'post'
+        }).then((res) => {
+          console.log(res)
+          if (res.status === 1) {
+            wx.navigateTo({
+              url: "/pages/wait/wait",
+            })
 
-      })
+          }
+
+        })
+      }
+      
       // const destination =this.data.destination
       // if(destination==''){
       //   wx.showToast({

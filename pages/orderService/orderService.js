@@ -165,20 +165,33 @@ Page({
     this.movetoPosition();
   },
   changeDriver(e){
+    let _this = this
+    wx.showModal({
+      content: '确定改派吗,这将会降低您的信用积分',
+      cancelColor: '#cccccc',
+      confirmColor: '#fc9c56',
+      success: function (res) {
+        if (res.confirm) {
 
-    let params = 3
-    util.request({
-      url: `${app.globalData.baseUrl}/api/driver/updateOrderInfoByOrderId`,
-      method: 'post',
-      data: params
-    }).then(res => {
-      console.log("申请改派：", res)
-      if (res.status === 1) {
-        wx.redirectTo({
-          url: "/pages/index/index"
-        })
+          let params = { "orderId": app.globalData.currOrderInfo.orderId }
+          util.request({
+            url: `${app.globalData.baseUrl}/api/driver/updateOrderInfoByOrderId`,
+            method: 'post',
+            data: params
+          }).then(res => {
+            console.log("申请改派：", res)
+            if (res.status === 1) {
+              _this.sendSocketMessage('driver,changeDriver')
+              wx.closeSocket({})        
+              wx.redirectTo({
+                url: "/pages/index/index"
+              })
+            }
+          })
+
+        }
       }
-    })
+    })  
 
   },
   changeState(e){
@@ -187,9 +200,8 @@ Page({
     if (!this.data.isAccessPassenger) {//到乘客上车点（接到乘客）
     
       _this.sendSocketMessage('driver,arriveToPassenger')
-
       let params = {
-        orderId: 3,
+        orderId: app.globalData.currOrderInfo.orderId,
         currentLocation: '1,1',
         targetLocation: '1,1'
       }
@@ -223,7 +235,7 @@ Page({
       })
 
       let params = {
-        orderId: 3,
+        orderId: app.globalData.currOrderInfo.orderId,
         currentLocation: '1,1',
         targetLocation: '1,1'
       }

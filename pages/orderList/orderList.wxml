@@ -17,7 +17,7 @@
           </view>
           
           <view class="total-state" bindtap="toRules">
-            {{item.status}} >
+            {{item.orderStatus}} >
           </view>
       </view>
     <!-- <view class="content">

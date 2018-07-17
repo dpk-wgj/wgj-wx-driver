@@ -1,5 +1,10 @@
 const utils = require('../../utils/util.js')
 import util from '../../utils/index';
+var QQMapWX = require('../../libs/qqmap-wx-jssdk.js');
+var qqmapsdk;
+qqmapsdk = new QQMapWX({
+  key: 'DHNBZ-2ZLKK-T7IJJ-AXSQW-WX5L6-A6FJZ'
+});
 const app = getApp()
 Page({
   data: {
@@ -14,6 +19,7 @@ Page({
     })
   },
   onLoad(){
+    var that = this
     util.request({
       url: `${app.globalData.baseUrl}/api/driver/getOrderInfoByDriverId`,
       method: 'get'
@@ -24,16 +30,59 @@ Page({
         for(let item of orderList){
           // item.startLoc = "丽水学院东校区"
           // item.endLoc = "万地广场"
-          item.startTime = utils.formatTime(new Date(item.startTime))
+          item.startTime = this.startTimeFormat(item.startTime)
+          if (item.orderStatus == 3) {     
+            item.orderStatus = '已完成'
+          } else if (item.orderStatus == 4) {
+            item.orderStatus = '已取消'
+          } else if (item.orderStatus == 2) {
+            item.orderStatus = '已改派'
+          } else {
+            item.orderStatus = '未完成'
+          }
+          let startStr = item.startLocation
+          let start = startStr.split(',')
+          let endStr = item.endLocation
+          let end = endStr.split(',')
+          qqmapsdk.reverseGeocoder({
+            location: {
+              latitude: start[1],
+              longitude: start[0]
+            },
+            success: function (addressRes) {
+              item.startLoc = addressRes.result.formatted_addresses.recommend;
+              // console.log('startLoc:',item.startLoc)
+              // qqmapsdk.reverseGeocoder({
+              //   location: {
+              //     latitude: end[1],
+              //     longitude: end[0]
+              //   },
+              //   success: function (addressRes) {
+              //     item.endLoc = addressRes.result.formatted_addresses.recommend;
+              //     console.log('endLoc:', item.endLoc)
+              //     that.setData({
+              //       orderList
+              //     })
+              //   },
+              // })
+            },
+          })
+          setTimeout(function(){
+            qqmapsdk.reverseGeocoder({
+              location: {
+                latitude: end[1],
+                longitude: end[0]
+              },
+              success: function (addressRes) {
+                item.endLoc = addressRes.result.formatted_addresses.recommend;
+                // console.log('endLoc:', item.endLoc)
+                that.setData({
+                  orderList
+                })
+              },
+            })
+          },1000)
         }
-        // console.log("orderList:", orderList)
-
-        this.setData({
-          // time: utils.formatTime(new Date()),
-          orderList
-          // starAddress: app.globalData.bluraddress,
-          // eddAddress: app.globalData.destination,
-        })
       }
     })
   },

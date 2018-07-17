@@ -25,7 +25,7 @@ Page({
     })
   },
   sendSocketMessage: function (msg) {
-    console.log("哈哈哈哈哈")
+    // console.log("哈哈哈哈哈")
 
     if (app.globalData.socketOpen) {
       wx.sendSocketMessage({
@@ -254,6 +254,7 @@ Page({
       })
     }
   },
+  // 结束行程
   endOrder(){
     wx.closeSocket({
       success: function(res){
@@ -263,9 +264,10 @@ Page({
         console.log("关闭了socket", res)
       },
     })
-    wx.redirectTo({
-      url:"/pages/evaluation/evaluation",
-    })  },
+    // wx.redirectTo({
+    //   url:"/pages/evaluation/evaluation",
+    // })  
+    },
   onReady: function () {
     wx.getLocation({
       type: "gcj02",

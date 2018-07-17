@@ -20,7 +20,7 @@
         </view>
       </view>
     </navigator>
-    <navigator url='/pages/message/message'>
+    <!-- <navigator url='/pages/message/message'>
     <view class="footprint con">
       <view class='footprint-icon icon'>
         <image src='../../assets/images/message.png' mode='aspectFit'></image>
@@ -30,7 +30,7 @@
         <image src='../../assets/images/more.png' mode='aspectFit'></image>
       </view>
     </view>
-    </navigator>
+    </navigator> -->
      
   </view>
   <view class="ft">

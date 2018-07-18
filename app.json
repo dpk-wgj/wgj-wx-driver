@@ -1,6 +1,7 @@
 {
   "pages": [
     
+    "pages/login/login",
     "pages/index/index",
     "pages/user/user",
     "pages/orderList/orderList",
@@ -8,9 +9,8 @@
     "pages/orderDetail/orderDetail",
     "pages/orderService/orderService",
     "pages/ws/ws",
-    "pages/tel/tel",
     "pages/authorization/authorization",
-    "pages/login/login",
+    "pages/test/test",
     "pages/logs/logs",
     "pages/starting/starting",
     "pages/destination/destination",

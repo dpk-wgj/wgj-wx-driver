@@ -1,12 +1,18 @@
 <view class="main">
     <view class="container">
         <view class="hd">
-            <text class="login">绑定手机号</text>
+            <text class="login">{{title}}</text>
         </view>
         <view class="bd">
             <input type="text" class="bd-tel" value="{{phone}}" bindinput="phoneInput" placeholder="请输入手机号"
                    placeholder-style="color:#999999"/>
             <image class="bd-img" wx:if="{{phone.length>0}}" bindtap="deletePhone" src="../../assets/images/cancel.png"/>
+        </view>
+        <view class='cd'>
+          <input type="text" class="cd-code" value="{{code}}" bindinput="codeInput" placeholder="请输入验证码" placeholder-style="color:#999999"/>
+            <image class="cd-img" wx:if="{{code.length>0}}" bindtap="deleteCode" src="../../assets/images/cancel.png"/>
+            <view class='time' wx:if='{{send}}'>{{time}}s</view>
+            <button class='btn' disabled="{{sendBtnDisabled}}" style="background-color: {{sendBtnBc}};" bindtap='send'>发送</button>
         </view>
         <view class="hd">
             <button class="didi-btn next-step" disabled="{{nextBtnDisabled}}" bindtap="login"

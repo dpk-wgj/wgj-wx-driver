@@ -10,10 +10,19 @@ Page({
     nextBtnBc: '#bcbcbc',
     phone: ''
   },
-  onLoad: function () {
-    let userInfo = app.globalData.userInfo
+  onLoad: function (options) {
+    let userInfo = app.globalData.driverInfo
     this.setData({
       userInfo: userInfo
+    })
+    // console.log(this.data.userInfo)
+    var info = this.data.userInfo
+    var str = this.data.userInfo.driverPhoneNumber
+    var after = str.substr(0, parseInt(str.split('').length / 3)) + '****' + str.substr(parseInt(str.split('').length / 3 + 4), str.split('').length)
+    // console.log(after)
+    info.driverPhoneNumber = after
+    this.setData({
+      userInfo: info
     })
 
   },
@@ -107,8 +116,9 @@ Page({
   },
 
   toTel: function(){
+    var title = "切换手机号"
     wx.navigateTo({
-      url: '/pages/tel/tel',
+      url: '/pages/login/login?title=' + title + '&change=true',
     })
   }
 

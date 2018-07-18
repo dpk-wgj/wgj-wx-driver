@@ -45,3 +45,42 @@
 .hidden{
     display: none
 }
+.cd{
+  /* height: 150px; */
+  border: 1px solid #eeeff0;
+  background-color: #fff; 
+  /* background: yellow; */
+  margin-top: 0rpx;
+  box-shadow:0 0 1rpx #e5e6e7;
+}
+.cd .cd-code{
+    height: 122rpx;
+    background: yellow;  
+    width: 60%;
+    padding-left: 45rpx;
+}
+.cd .cd-img{
+     position: absolute;
+     float: right;
+     top: 470rpx;
+     right: 190rpx;
+     width: 35rpx;
+     height: 35rpx;
+ }
+ .cd .time{
+  position: absolute;
+  top: 465rpx;
+  right: 150rpx;
+  font-size: 25rpx;
+  color: rgb(150,150,150)
+ }
+.cd .btn{
+  width: 108rpx;
+  height: 30px;
+  font-size: 27rpx;
+  line-height: 30px;
+  color: rgb(100,100,100);
+  position: absolute;
+  right: 20rpx;
+  top: 455rpx;
+}

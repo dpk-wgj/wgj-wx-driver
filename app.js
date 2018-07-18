@@ -33,7 +33,7 @@ App({
               if (res2.status === 1) {
                 
                 this.globalData.driverInfo = res2.result.driverInfo
-                // console.log("后台请求登录：", this.globalData.driverInfo)
+                console.log("后台请求登录：", this.globalData.driverInfo)
 
               }
             })

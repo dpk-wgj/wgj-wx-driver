@@ -111,13 +111,13 @@ Page({
       phoneNumber: this.data.phone
     }
     console.log('发送验证码:',param)
-    // util.request({
-    //   url: `${app.globalData.baseUrl}/api/driver/sendCodeForDriver`,
-    //   method: "post",
-    //   data: param
-    // }).then((res) => {
-    //   console.log(res)
-    // })
+    util.request({
+      url: `${app.globalData.baseUrl}/api/driver/sendCodeForDriver`,
+      method: "post",
+      data: param
+    }).then((res) => {
+      console.log(res)
+    })
   },
   // 登录
   login: function () {
@@ -126,16 +126,16 @@ Page({
       randomNum: this.data.code
     }
     console.log('绑定：',param)
-    // util.request({
-    //   url: `${app.globalData.baseUrl}/api/driver/bindDriverPhoneNumber`,
-    //   method: "post",
-    //   data: param
-    // }).then((res) => {
-    //   console.log(res)
-    //   wx.navigateTo({
-    //     url: '/pages/index/index',
-    //   })
-    // })
+    util.request({
+      url: `${app.globalData.baseUrl}/api/driver/bindDriverPhoneNumber`,
+      method: "post",
+      data: param
+    }).then((res) => {
+      console.log(res)
+      wx.navigateTo({
+        url: '/pages/index/index',
+      })
+    })
     
   }
 

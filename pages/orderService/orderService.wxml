@@ -12,11 +12,11 @@
     <cover-view class="total">
         <cover-view class="total-driver">
             <cover-view class="driver-info">
-                <cover-view class="driver-img">
+                <!-- <cover-view class="driver-img">
                     <cover-image style="width: 150rpx;height: 150rpx;"src="../../assets/images/driver.png"/>
-                </cover-view>
+                </cover-view> -->
                 <cover-view class="driver-detailed" >
-                    <cover-view class="detailed-name">{{passengerInfo.passengerWxId}}</cover-view>
+                    <cover-view class="detailed-name">乘客：{{passengerInfo.passengerWxId}}</cover-view>
                     <cover-view class="detailed-name">目的地：{{orderInfo.endLocation}}</cover-view>
                 </cover-view>
             </cover-view>
@@ -43,8 +43,8 @@
 
     </cover-view>
      <cover-view class="ft" hidden='{{isAccessPassenger}}'>
-        <cover-view class="ft-cancel"bindtap="changeDriver">服务改派</cover-view>
-        <cover-view class="ft-help" bindtap="endOrder">结束行程</cover-view>
+        <cover-view class="ft-cancel" bindtap="changeDriver">服务改派</cover-view>
+        <!-- <cover-view class="ft-help" bindtap="endOrder">结束行程</cover-view> -->
         <!-- <cover-view class="ft-app" bindtap="toApp">下载滴滴APP</cover-view> -->
     </cover-view> 
 

@@ -25,6 +25,9 @@
     color: rgba(0, 0, 0, .5);
     text-align: center;
 }
+.driver-detailed .detailed-name{
+  padding: 10px 0;
+}
 .prompt-time{
     color: #fc9153;
     display: inline;
@@ -45,7 +48,7 @@
     box-sizing: border-box
 }
 .ft-cancel{
-    width: 50%;
+    width: 100%;
     text-align: center;
     border-right: 1px solid #f5f5f5;
  

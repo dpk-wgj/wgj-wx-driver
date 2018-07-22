@@ -31,5 +31,8 @@ Page({
       disabled: true
     })
   },
+  click(){
+
+  }
 
 })

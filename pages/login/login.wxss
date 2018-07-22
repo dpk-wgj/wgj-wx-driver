@@ -55,7 +55,7 @@
 }
 .cd .cd-code{
     height: 122rpx;
-    background: yellow;  
+    /* background: yellow;   */
     width: 60%;
     padding-left: 45rpx;
 }
@@ -63,7 +63,7 @@
      position: absolute;
      float: right;
      top: 470rpx;
-     right: 190rpx;
+     right: 200rpx;
      width: 35rpx;
      height: 35rpx;
  }

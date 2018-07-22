@@ -40,47 +40,39 @@ Page({
     //后台websocket传过来的乘客Id
     let passengerInfo = app.globalData.passengerInfo
     let orderInfo = app.globalData.currOrderInfo
+    console.log('订单消息：',this.data.orderInfo)
+    var str = orderInfo.endLocation
+    var arr = str.split(',')
+    console.assert('arr:',arr)
+    orderInfo.endLocation = arr[0]
+    // orderInfo.endLocation = endLocation;
+    console.log("司机拿到的乘客信息和订单信息：", passengerInfo, orderInfo)
+    that.setData({
+      hiddenLoading: true,
+      passengerInfo: passengerInfo,
+      orderInfo: orderInfo
+    })
 
-    // 目的地转换为名称
-    let endStr = orderInfo.endLocation
-    let end = endStr.split(',')
-    let endLocation;
-    qqmapsdk.reverseGeocoder({
-      location: {
-        latitude: end[1],
-        longitude: end[0]
-      },
-      success: function (addressRes) {
-        endLocation = addressRes.result.formatted_addresses.recommend;
-        orderInfo.endLocation = endLocation;
-        console.log("司机拿到的乘客信息和订单信息：", passengerInfo, orderInfo)
-        that.setData({
-          hiddenLoading: true,
-          passengerInfo: passengerInfo,
-          orderInfo: orderInfo
+    // socket接收
+    wx.onSocketMessage(function (res) {
+      res = JSON.parse(res.data)
+      console.log('收到服务器内容：+' + res.status)
+      // res.status === 3  取消订单
+      if (res.status === 4) {
+        console.log("乘客已经取消了订单")
+        wx.closeSocket()
+        wx.showToast({
+          title: '乘客已经取消了订单',
+          icon: 'fail',
+          mask: true,
+          duration: 1000
         })
-        // socket接收
-        wx.onSocketMessage(function (res) {
-          res = JSON.parse(res.data)
-          console.log('收到服务器内容：' + res.status)
-          // res.status === 3  取消订单
-          if (res.status === 3) {
-            console.log("乘客已经取消了订单")
-            wx.showToast({
-              title: '乘客已经取消了订单',
-              icon: 'fail',
-              mask: true,
-              duration: 1000
-            })
-            wx.redirectTo({
-              url: '/pages/index/index',
-            })
-          }
+        wx.redirectTo({
+          url: '/pages/index/index',
         })
       }
     })
-
-    
+      
    
   },
   navigate(e){
@@ -121,22 +113,30 @@ Page({
       success: function (res) {
         if (res.confirm) {
 
-          let params = { "orderId": app.globalData.currOrderInfo.orderId }
-          util.request({
-            url: `${app.globalData.baseUrl}/api/driver/updateOrderInfoByOrderId`,
-            method: 'post',
-            data: params
-          }).then(res => {
-            console.log("申请改派：", res)
-            if (res.status === 1) {
-              _this.sendSocketMessage('driver,changeDriver')
-              wx.closeSocket({})        
-              wx.redirectTo({
-                url: "/pages/index/index"
+          _this.sendSocketMessage('driver,changeDriver')//--mark
+          wx.onSocketMessage(function (res) {
+
+            res = JSON.parse(res.data)
+            console.log('收到服务器内容：' + res.status)
+            if(res.status === 3){
+                  
+              let params = { "orderId": app.globalData.currOrderInfo.orderId }
+              util.request({
+                url: `${app.globalData.baseUrl}/api/driver/updateOrderInfoByOrderId`,
+                method: 'post',
+                data: params
+              }).then(res => {
+                console.log("申请改派：", res)
+                if (res.status === 1) {
+                  wx.closeSocket({})        
+                  wx.redirectTo({
+                    url: "/pages/index/index"
+                  })
+                }
               })
             }
-          })
 
+          })
         }
       }
     })  
@@ -179,7 +179,7 @@ Page({
       wx.onSocketMessage(function (res) {
         res = JSON.parse(res.data)
         // res.status === 2  取消订单
-        console.log('收到服务器内容：' + res.data)
+        console.log('收到服务器内容（到达目的地）：' + res.data)
       })
 
       let params = {
@@ -195,6 +195,7 @@ Page({
       }).then(res => {
         console.log("到达目的地：", res)
         if (res.status === 1) {
+          wx.closeSocket() 
           wx.redirectTo({
             url: "/pages/orderEnd/orderEnd",
           })

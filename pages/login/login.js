@@ -85,38 +85,50 @@ Page({
   },
   // 发送验证码
   send: function () {
-    this.setData({
-      send: true,
-      sendBtnDisabled: true,
-      time: 59
-    })
     var that = this;
-    var currentTime = that.data.time
-    interval = setInterval(function () {
-      currentTime--;
-      that.setData({
-        time: currentTime
-      })
-      if (currentTime <= 0) {
-        clearInterval(interval)
-        that.setData({
-          time: '',
-          send: false,
-          sendBtnDisabled: false
-        })
-      }
-    }, 1000)
-
     let param = {
       phoneNumber: this.data.phone
     }
     console.log('发送验证码:',param)
     util.request({
-      url: `${app.globalData.baseUrl}/api/driver/sendCodeForDriver`,
-      method: "post",
-      data: param
+      url: `${app.globalData.baseUrl}/api/driver/getDriverInfoByDriverPhoneNumber/` + param.phoneNumber,
+      method: "get",
     }).then((res) => {
-      console.log(res)
+      console.log('判断手机号是否已绑定：',res)
+      if (res.status == 0) {
+        that.setData({
+          send: true,
+          sendBtnDisabled: true,
+          time: 59
+        })
+        var currentTime = that.data.time
+        interval = setInterval(function () {
+          currentTime--;
+          that.setData({
+            time: currentTime
+          })
+          if (currentTime <= 0) {
+            clearInterval(interval)
+            that.setData({
+              time: '',
+              send: false,
+              sendBtnDisabled: false
+            })
+          }
+        }, 1000)
+        util.request({
+          url: `${app.globalData.baseUrl}/api/driver/sendCodeForDriver`,
+          method: "post",
+          data: param
+        }).then((res) => {
+          console.log('发送验证码：', res)
+        })
+      } else if (res.status == 1) {
+        wx.showToast({
+          title: '该手机号已绑定',
+          icon: 'none'
+        })
+      }
     })
   },
   // 登录
@@ -132,9 +144,11 @@ Page({
       data: param
     }).then((res) => {
       console.log(res)
-      wx.navigateTo({
-        url: '/pages/index/index',
-      })
+      if(res.status == 1){
+        wx.navigateTo({
+          url: '/pages/index/index',
+        })
+      }
     })
     
   }

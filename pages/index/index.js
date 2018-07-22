@@ -77,8 +77,8 @@ Page({
         })
       } else{
         let params = {
-          "driverId": app.globalData.driverId,
-          "driverWxId": app.globalData.driverWxId,
+          "driverId": app.globalData.driverInfo.driverId,
+          "driverWxId": app.globalData.driverInfo.driverWxId,
           "driverStatus": 1
         }
         util.request({

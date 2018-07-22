@@ -15,18 +15,24 @@ Page({
       });
   },
   onLoad(){
-    wx.getStorage({
-      key:'driver',
-      success: (res)=>{
-          console.log(res.data)
-          this.setData({
-            driver:res.data
-          })
-      } 
-    })
+    // wx.getStorage({
+    //   key:'driver',
+    //   success: (res)=>{
+    //       console.log(res.data)
+    //       this.setData({
+    //         driver:res.data
+    //       })
+    //   } 
+    // })
   // console.log(app.globalData.play)
+    // this.setData({
+      // play: app.globalData.play
+    // })
+    console.log('乘客信息：', app.globalData.passengerInfo)
+    console.log('订单信息：', app.globalData.currOrderInfo)
     this.setData({
-      play: app.globalData.play
+      passengerInfo: app.globalData.passengerInfo,
+      orderInfo: app.globalData.currOrderInfo
     })
   },
   toIndex(){

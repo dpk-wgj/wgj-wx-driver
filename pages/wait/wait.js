@@ -47,12 +47,14 @@ onLoad: function(){
       
       console.log('收到服务器内容：', res)
       res = JSON.parse(res.data)
-    
+
       if (res.status === 1){
         app.globalData.passengerInfo = res.result.passenger
-        console.log('wait:', res.result.passenger)
+        // console.log('wait:', res.result.passenger)
         app.globalData.currOrderInfo = res.result.order
         // wx.closeSocket()
+        console.log('res订单信息目的地：', res.result.order.endLocation)
+        console.log('wait订单信息：',app.globalData.currOrderInfo)
         wx.redirectTo({
           url: `/pages/orderService/orderService`,
         })

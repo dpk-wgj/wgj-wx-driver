@@ -32,7 +32,17 @@ Page({
     })
   },
   click(){
+    wx.scanCode({
+      success: (res) => {
+        console.log('扫码返回：', res)
+      },
+      fail: (res) => {
 
+      },
+      complete: (res) => {
+
+      }
+    })
   }
 
 })

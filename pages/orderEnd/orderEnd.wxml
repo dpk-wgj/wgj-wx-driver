@@ -2,22 +2,18 @@
   <view class="total">
         <view class="total-driver">
             <view class="driver-info">
-                <view class="driver-img">
+                <!-- <view class="driver-img">
                     <image style="width: 150rpx;height: 150rpx;"src="../../assets/images/driver.png"/>
-                </view>
+                </view> -->
                 <view class="driver-detailed" >
-                    <view class="detailed-name">{{driver.name}}
-                    </view>
-                   
-                    <view class="detailed-Cartnumber">{{driver.Cartnumber}}</view>
-
-                    <view class="detailed-cart">{{driver.cart}}</view>
+                    <view class="detailed-name">乘客：{{passengerInfo.passengerWxId}}</view>
+                    <view class="detailed-name">目的地：{{orderInfo.endLocation}}</view>
                 </view>
             </view>
             <view class="driver-message">
-                    <view class="mas">
+                    <!-- <view class="mas">
                             <image style="width: 70rpx;height: 70rpx;" src="../../assets/images/msm.png"/>
-                        </view>
+                        </view> -->
                         <view class="phone">
                             <image style="width: 70rpx;height: 70rpx;" src="../../assets/images/phone.png"/>
                         </view>

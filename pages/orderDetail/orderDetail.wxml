@@ -3,17 +3,12 @@
         <!--司机信息  -->
         <view class="total-driver">
             <view class="driver-info">
-                <view class="driver-img">
+                <!-- <view class="driver-img">
                     <image style="width: 150rpx;height: 150rpx;"src="../../assets/images/driver.png"/>
-                </view>
-                <view class="driver-detailed" >
-                    <view class="detailed-name">{{driver.name}}
-
-                    </view>
-                   
-                    <view class="detailed-Cartnumber">{{driver.Cartnumber}}</view>
-
-                    <view class="detailed-cart">{{driver.cart}}</view>
+                </view> -->
+                 <view class="driver-detailed" >
+                    <view class="detailed-name">乘客：{{passengerInfo.passengerWxId}}</view>
+                    <view class="detailed-name">目的地：{{orderInfo.endLocation}}</view>
                 </view>
             </view>
             
@@ -25,9 +20,9 @@
         </view>
         <!--订单内容  -->
         <view class='order'>
-          <view class='time o'>{{time}}</view>
-          <view class='startLocation o'>起点：{{startLocation}}</view>
-          <view class='endLocation o'>终点：{{endLocation}}</view>
+           <view class='time o'>{{orderInfo.startTime}}-{{orderInfo.endTime}}</view> 
+          <view class='startLocation o'>起点：{{orderInfo.startLocation}}</view>
+          <view class='endLocation o'>终点：{{orderInfo.endLocation}}</view>
         </view>
         <!--投诉  -->
         <view class='btn'>

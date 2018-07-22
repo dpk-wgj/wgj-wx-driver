@@ -7,9 +7,9 @@ Page({
     ],
     play: '',
     id: 0,
-    time: '7月8日 11：11 - 11:30',
-    startLocation: '丽水学院',
-    endLocation: '丽水站'
+    time: '',
+    startLocation: '',
+    endLocation: ''
   },
   myStarChoose(e) {
     let star = parseInt(e.target.dataset.star) || 0;
@@ -18,19 +18,40 @@ Page({
     });
   },
   onLoad() {
-    wx.getStorage({
-      key: 'driver',
-      success: (res) => {
-        console.log(res.data)
-        this.setData({
-          driver: res.data
-        })
-      }
-    })
-    // console.log(app.globalData.play)
+    console.log('乘客信息：', app.globalData.passengerInfo)
+    console.log('订单信息：', app.globalData.currOrderInfo)
+    let passengerInfo = app.globalData.passengerInfo
+    let orderInfo = app.globalData.currOrderInfo
+    var str1 = orderInfo.startLocation
+    var arr1 = str1.split(',')
+    // console.log('arr[0]:',arr[0])
+    orderInfo.startLocation = arr1[0]
+    var str2 = orderInfo.endLocation
+    var arr2 = str2.split(',')
+    // console.log('arr[0]:',arr[0])
+    orderInfo.endLocation = arr2[0]
+
+    orderInfo.startTime = this.startTimeFormat(orderInfo.startTime)
+    orderInfo.endTime = this.endTimeFormat(orderInfo.endTime)
+
     this.setData({
-      play: app.globalData.play
+      passengerInfo: passengerInfo,
+      orderInfo: orderInfo
     })
+  },
+  // 开始时间格式化
+  startTimeFormat(e) {
+    var time = e;
+    var d = new Date(time);
+    var times = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+    return times;
+  },
+  // 结束时间格式化
+  endTimeFormat(e) {
+    var time = e;
+    var d = new Date(time);
+    var times = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+    return times;
   },
   toIndex() {
 
@@ -61,7 +82,7 @@ Page({
     // })
     wx.makePhoneCall({
       // phoneNumber: this.phone,
-      phoneNumber: "12345678900",
+      phoneNumber: app.globalData.passengerInfo.passengerPhoneNumber,
       success: function () {
         console.log("拨打电话成功")
       },

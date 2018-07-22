@@ -40,7 +40,7 @@ Page({
     //后台websocket传过来的乘客Id
     let passengerInfo = app.globalData.passengerInfo
     let orderInfo = app.globalData.currOrderInfo
-    console.log('订单消息：',this.data.orderInfo)
+
     var str = orderInfo.endLocation
     var arr = str.split(',')
     console.assert('arr:',arr)
@@ -181,7 +181,11 @@ Page({
         // res.status === 2  取消订单
         console.log('收到服务器内容（到达目的地）：' + res.data)
       })
-
+      let passengerInfo = app.globalData.passengerInfo
+      let orderInfo = app.globalData.currOrderInfo
+      console.log('乘客信息:', passengerInfo)
+      console.log('订单信息：', orderInfo)
+      console.log('目的地：', orderInfo.endLocation)
       let params = {
         orderId: app.globalData.currOrderInfo.orderId,
         currentLocation: '1,1',
@@ -195,6 +199,19 @@ Page({
       }).then(res => {
         console.log("到达目的地：", res)
         if (res.status === 1) {
+          let p = {
+            orderId: app.globalData.currOrderInfo.orderId
+          }
+          util.request({
+            url: `${app.globalData.baseUrl}/api/driver/getOrderByOrderId`,
+            method: 'post',
+            data: p
+          }).then(res => {
+            console.log('到达目的地改变订单信息',res)
+            app.globalData.currOrderInfo = res.result.order.orderInfo
+            console.log('到达目的地后res.orderinfo：', res.result.order.orderInfo)
+            console.log('到达目的地后app.orderinfo：', app.globalData.currOrderInfo)
+          })
           wx.closeSocket() 
           wx.redirectTo({
             url: "/pages/orderEnd/orderEnd",
@@ -243,9 +260,10 @@ Page({
   },
   // 拨打电话
   calling: function () {
+    console.log('手机号:', app.globalData.passengerInfo.passengerPhoneNumber)
     wx.makePhoneCall({
       // phoneNumber: this.phone,
-      phoneNumber: "12345678900",
+      phoneNumber: app.globalData.passengerInfo.passengerPhoneNumber,
       success: function () {
         console.log("拨打电话成功")
       },

@@ -3,6 +3,9 @@
 page{
   background: rgb(242, 243, 245); 
 }
+.driver-detailed .detailed-name{
+  margin: 10px 0;
+}
 .order{
   height: 100px;
   padding: 20px 100rpx;

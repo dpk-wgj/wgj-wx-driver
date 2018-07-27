@@ -52,6 +52,7 @@ Page({
     },
     requestCart(e){},
     onShow(){
+      
         this.setData({
             address:app.globalData.bluraddress,
             destination:app.globalData.destination,
@@ -62,7 +63,18 @@ Page({
    
     // 点击出车
     startDrive(e){
-      if (app.globalData.driverInfo.driverPhoneNumber == null){
+      console.log('app.driverInfo:',app.globalData.driverInfo)
+      if (app.globalData.driverInfo.driverStatus == 0){
+        wx.showToast({
+          title: '您未上岗',
+          icon: 'none'
+        })
+      } else if (app.globalData.openid == ''){
+        wx.showToast({
+          title: '请稍后再操作',
+          icon: 'none'
+        })
+      } else if (app.globalData.driverInfo.driverPhoneNumber == null){
         wx.showToast({
           title: '未绑定手机号',
           icon: 'none',

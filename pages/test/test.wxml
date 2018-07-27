@@ -1,2 +1,0 @@
-<!--pages/test/test.wxml-->
-<button bindtap='click'>扫一扫</button>

@@ -1,5 +1,6 @@
 // pages/login/login.js
 const app = getApp()
+import util from '../../utils/index';
 Page({
 
   /**
@@ -120,6 +121,57 @@ Page({
     wx.navigateTo({
       url: '/pages/login/login?title=' + title + '&change=true',
     })
-  }
+  },
+
+  // 扫一扫
+  scanCode: function () {
+    var that = this
+    // wx.scanCode({
+    //   success: function (res) {
+    //     that.setData({
+    //       result: res.result
+    //     })
+    //   },
+    //   fail: function (res) {
+    //   }
+    // })
+    let driverStatus
+    if (app.globalData.driverInfo.driverStatus == 0){
+      driverStatus = 1
+    } else if (app.globalData.driverInfo.driverStatus == 1) {
+      driverStatus = 0
+    }
+
+    let param = {
+      driverId: app.globalData.driverInfo.driverId,
+      driverStatus: driverStatus
+    }
+    // console.log('param:', param)
+    util.request({
+      url: `${app.globalData.baseUrl}/api/driver/updateApiDriverInfoByDriverId`,
+      method: "post",
+      data: param
+    }).then(res => {
+      console.log('更换上下岗状态：', res)
+      if(res.status == 1){
+        if (app.globalData.driverInfo.driverStatus == 0){
+          console.log('上岗')
+          app.globalData.driverInfo.driverStatus = 1
+          wx.showToast({
+            title: '上岗成功',
+            icon: 'none'
+          })
+        } else if (app.globalData.driverInfo.driverStatus == 1){
+          console.log('下岗')
+          app.globalData.driverInfo.driverStatus = 0
+          wx.showToast({
+            title: '已下岗',
+            icon: 'none'
+          })
+        }    
+      }
+    })
+
+  },
 
 })

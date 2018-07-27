@@ -22,8 +22,7 @@ App({
             // console.log("登录：", res1)
             this.globalData.openid = res1.openid
             let param = {
-              driverWxId: "yjq",//this.globalData.openid,
-              // driverName: 
+              driverWxId: this.globalData.openid,//this.globalData.openid
             }
             util.request({
               url: `${this.globalData.baseUrl}/public/driver/login`,
@@ -31,26 +30,67 @@ App({
               data: param
             }).then(res2 => {
               if (res2.status === 1) {
-                
+                console.log('res2:',res2)
                 this.globalData.driverInfo = res2.result.driverInfo
                 console.log("后台请求登录：", this.globalData.driverInfo)
-
+                // if (this.globalData.driverInfo.driverStatus == 1){
+                  wx.getLocation({
+                    type: "gcj02",
+                    success: (res) => {
+                      // console.log("获取司机经纬度", res)
+                      let param3 = {
+                        driverId: this.globalData.driverInfo.driverId,
+                        driverLocation: res.longitude + ',' + res.latitude
+                      }
+                      // console.log("上传司机经纬度", param3)
+                      util.request({
+                        url: `${this.globalData.baseUrl}/api/driver/updateApiDriverInfoByDriverId`,
+                        method: "post",
+                        data: param3
+                      }).then(res3 => {
+                        // console.log('司机位置更新：',res3)
+                      })
+                    }
+                  })
+                  let t = 0
+                  this.socketTimer = setInterval(() => {
+                    t++;
+                    wx.getLocation({
+                      type: "gcj02",
+                      success: (res) => {
+                        // console.log("获取司机经纬度", res)
+                        let param3 = {
+                          driverId: this.globalData.driverInfo.driverId,
+                          driverLocation: res.longitude + ',' + res.latitude
+                        }
+                        // console.log("上传司机经纬度", param3)
+                        util.request({
+                          url: `${this.globalData.baseUrl}/api/driver/updateApiDriverInfoByDriverId`,
+                          method: "post",
+                          data: param3
+                        }).then(res3 => {
+                          // console.log('司机位置更新：',res3)
+                        })
+                      }
+                    })
+                  }, 60000)
+                // }
+                
+               
               }
             })
- 
-          }
-              
+          }    
         })
-        
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
       }
     })
 
     // 获取用户信息
   },
   globalData: {
-    baseUrl: 'http://localhost:8000',
-    baseWsUrl: 'ws://localhost:8000',
+    baseUrl: 'http://120.79.251.229:8000',
+    baseWsUrl: 'ws://120.79.251.229:8000',
+    // baseUrl: 'http://localhost:8000',
+    // baseWsUrl: 'ws://localhost:8000',
     userInfo: null, 
     socketOpen: false,
     socketMsgQueue: [],

@@ -9,6 +9,15 @@
     <!-- </navigator> -->
   </view>
   <view class="content">
+    <view class="scan con" ontap='scanCode'>
+      <view class='scan-icon icon'>
+        <image src='../../assets/images/scan.png' mode='aspectFit'></image>
+      </view>
+      <view class='scan-title title'>扫一扫</view>
+      <view class='scan-img img'>
+         <image src='../../assets/images/more.png' mode='aspectFit'></image> 
+      </view>
+    </view>
     <navigator url='/pages/orderList/orderList'>
       <view class="collection con">
         <view class='collection-icon icon'>

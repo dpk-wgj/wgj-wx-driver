@@ -16,8 +16,8 @@
                     <cover-image style="width: 150rpx;height: 150rpx;"src="../../assets/images/driver.png"/>
                 </cover-view> -->
                 <cover-view class="driver-detailed" >
-                    <cover-view class="detailed-name">乘客：{{passengerInfo.passengerWxId}}</cover-view>
-                    <cover-view class="detailed-name">目的地：{{orderInfo.endLocation}}</cover-view>
+                    <cover-view class="detailed-name">乘客：{{passengerInfo.passengerPhoneNumber}}</cover-view>
+                    <cover-view class="detailed-name">目的地：{{orderInfo.endLocation1}}</cover-view>
                 </cover-view>
             </cover-view>
             <cover-view class="driver-message">

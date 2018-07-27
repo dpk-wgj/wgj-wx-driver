@@ -53,8 +53,11 @@ onLoad: function(){
         // console.log('wait:', res.result.passenger)
         app.globalData.currOrderInfo = res.result.order
         // wx.closeSocket()
+        console.log('res订单信息：', res.result.order)
+        console.log('wait app订单信息：', app.globalData.currOrderInfo)
+
         console.log('res订单信息目的地：', res.result.order.endLocation)
-        console.log('wait订单信息：',app.globalData.currOrderInfo)
+        console.log('wait app订单信息目的地：', app.globalData.currOrderInfo.endLocation)
         wx.redirectTo({
           url: `/pages/orderService/orderService`,
         })
@@ -143,6 +146,7 @@ drawProgressbg: function(){
       confirmColor: '#fc9c56',
       success: function (res) {
         if (res.confirm) {
+          wx.closeSocket()
           wx.redirectTo({
             url: "/pages/index/index",
           })

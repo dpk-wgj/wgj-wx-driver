@@ -11,7 +11,6 @@
     "pages/login/login",
     "pages/ws/ws",
     "pages/authorization/authorization",
-    "pages/test/test",
     
     "pages/logs/logs",
     "pages/starting/starting",

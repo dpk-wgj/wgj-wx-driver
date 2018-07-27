@@ -6,7 +6,7 @@
                     <image style="width: 150rpx;height: 150rpx;"src="../../assets/images/driver.png"/>
                 </view> -->
                 <view class="driver-detailed" >
-                    <view class="detailed-name">乘客：{{passengerInfo.passengerWxId}}</view>
+                    <view class="detailed-name">乘客：{{passengerInfo.passengerPhoneNumber}}</view>
                     <view class="detailed-name">目的地：{{orderInfo.endLocation}}</view>
                 </view>
             </view>
@@ -34,7 +34,7 @@
 
         <navigator url='/pages/index/index'>
 
-          <view class="toIndex">
+          <view class="toIndex" bindtap='toIndex'>
               <view class="text">返回首页</view>
           </view>
         </navigator>

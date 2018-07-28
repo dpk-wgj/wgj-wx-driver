@@ -91,11 +91,12 @@ Page({
     }
     console.log('发送验证码:',param)
     util.request({
-      url: `${app.globalData.baseUrl}/api/driver/getDriverInfoByDriverPhoneNumber/` + param.phoneNumber,
-      method: "get",
+      url: `${app.globalData.baseUrl}/public/sendCodeForDriver`,
+      method: "post",
+      data: param
     }).then((res) => {
-      console.log('判断手机号是否已绑定：',res)
-      if (res.status == 0) {
+      console.log('发送验证码返回值：',res)
+      if (res.status == 1) {
         that.setData({
           send: true,
           sendBtnDisabled: true,
@@ -116,37 +117,34 @@ Page({
             })
           }
         }, 1000)
-        util.request({
-          url: `${app.globalData.baseUrl}/api/driver/sendCodeForDriver`,
-          method: "post",
-          data: param
-        }).then((res) => {
-          console.log('发送验证码：', res)
-        })
-      } else if (res.status == 1) {
-        wx.showToast({
-          title: '该手机号已绑定',
-          icon: 'none'
-        })
-      }
+      } 
     })
   },
   // 登录
   login: function () {
-    app.globalData.driverInfo.driverPhoneNumber = this.data.phone
+    // console.log('this.data.phone:',this.data.phone)
+    // app.globalData.driverInfo.driverPhoneNumber = this.data.phone
+    // console.log('app:', app.globalData.driverInfo)
     let param = {
-      randomNum: this.data.code
+      randomNum: this.data.code,
+      driverWxId: app.globalData.openid
     }
-    console.log('绑定：',param)
+    console.log('激活：',param)
     util.request({
-      url: `${app.globalData.baseUrl}/api/driver/bindDriverPhoneNumber`,
+      url: `${app.globalData.baseUrl}/public/bindDriverPhoneNumber`,
       method: "post",
       data: param
     }).then((res) => {
-      console.log(res)
-      if(res.status == 1){
+      console.log('激活返回值：',res)
+      if(res.result == 1){
         wx.navigateTo({
           url: '/pages/index/index',
+        })
+      }
+      if(res.result == null){
+        wx.showToast({
+          title: '激活失败',
+          icon: 'none'
         })
       }
     })

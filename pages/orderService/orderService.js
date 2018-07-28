@@ -93,8 +93,8 @@ Page({
   },
   // 页面显示
   onShow(){
-    // console.log('onshow!!!')
-    // if (app.globalData.currOrderInfo.flag){
+
+      // 订单中司机位置
       wx.getLocation({
         type: "gcj02",
         success: (res) => {
@@ -110,13 +110,23 @@ Page({
           type: "gcj02",
           success: (res) => {
             console.log("获取服务中司机经纬度", res)
-            app.globalData.currOrderInfo.locationInfo += '-' + res.longitude + ',' + res.latitude
-            console.log('locationInfo:', app.globalData.currOrderInfo.locationInfo)
+            // location = res.longitude + ',' + res.latitude
+            let str = app.globalData.currOrderInfo.locationInfo;
+            let arr = str.split('-');
+            let location = arr[arr.length-1];
+            let larr = location.split(',');
+            let longitude = larr[0];
+            let latitude = larr[1];
+            if (res.longitude - longitude < 0.002325 || res.latitude - latitude > 0.002375){
+              app.globalData.currOrderInfo.locationInfo += '-' + res.longitude + ',' + res.latitude
+              console.log('locationInfo:', app.globalData.currOrderInfo.locationInfo)
+            }
           }
         })
-      }, 1000)
-    // }
+      }, 60000)
    
+
+
     this.requesDriver();
     setTimeout(() => {
       this.setData({

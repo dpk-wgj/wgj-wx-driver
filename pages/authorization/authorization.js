@@ -37,7 +37,7 @@ Page({
 
   bindGetUserInfo: function (e) {
     let backtype = this.data.backType;
-    console.log(e.detail.userInfo)
+    // console.log(e.detail.userInfo)
     if (e.detail.userInfo) {
       app.globalData.userInfo = e.detail.userInfo
       wx.setStorageSync('userInfo', e.detail.userInfo)

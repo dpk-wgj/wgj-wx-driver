@@ -16,7 +16,7 @@
         </view>
         <view class="hd">
             <button class="didi-btn next-step" disabled="{{nextBtnDisabled}}" bindtap="login"
-                    style="background-color: {{nextBtnBc}};color:#fff">绑定
+                    style="background-color: {{nextBtnBc}};color:#fff">激活
             </button>
         </view>
     </view>

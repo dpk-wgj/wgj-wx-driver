@@ -59,67 +59,12 @@ Page({
     console.log("a")
     this.setData({ phone: '' })
   },
-  // 登录
-  login: function () {
-    app.globalData.userInfo = { phone: this.data.phone }
-    wx.navigateTo({
-      url: '/pages/index/index',
-    })
-  },
-  // function login(){
-  //   return 
-  // }
-
-  // function getUserInfo() {
-  //   return new Promise((resolve, reject) => wx.login({
-  //     success: resolve,
-  //     fail: reject
-  //   })).then(res => new Promise((resolve, reject) =>
-  //       wx.getUserInfo({
-  //         success: resolve,
-  //         fail: reject
-  //       })
-  //     ))
-  //   }
-  // 登录
-  onGotUserInfo: function (e) {
-    console.log(e.detail.errMsg)
-    console.log(e.detail.userInfo)
-    console.log(e.detail.rawData)
-  },
-  wxLogin: function () {
-    wx.login({
-      success: function (res) {
-        console.log("登录状态码：", res)
-        if (res.code) {
-          //发起网络请求
-          wx.getUserInfo({
-            success: function (res) {
-              console("!!!", res.userInfo)
-            }
-          })
-          wx.request({
-            url: 'https://test.com/onLogin',
-            data: {
-              code: res.code
-            }
-          })
-
-        } else {
-          console.log('登录失败！' + res.errMsg)
-        }
-      }
-
-    });
-    wx.navigateTo({
-      url: '/pages/index/index',
-    })
-  },
 
   toTel: function(){
     var title = "切换手机号"
+    var btn = "切换"
     wx.navigateTo({
-      url: '/pages/login/login?title=' + title + '&change=true',
+      url: '/pages/login/login?title=' + title + '&btn=' + btn + '&change=true',
     })
   },
 
@@ -144,7 +89,8 @@ Page({
 
     let param = {
       driverId: app.globalData.driverInfo.driverId,
-      driverStatus: driverStatus
+      driverStatus: driverStatus,
+      carId: app.globalData.driverInfo.carId
     }
     // console.log('param:', param)
     util.request({
@@ -153,19 +99,25 @@ Page({
       data: param
     }).then(res => {
       console.log('更换上下岗状态：', res)
-      if(res.status == 1){
+      if(res.status == 0){
+        // app.globalData.driverInfo.driverStatus = 0
+        wx.showToast({
+          title: '已有司机上岗',
+          icon: 'none'
+        })
+      } else if(res.status == 1){
         if (app.globalData.driverInfo.driverStatus == 0){
-          console.log('上岗')
           app.globalData.driverInfo.driverStatus = 1
+          console.log('上岗status:', app.globalData.driverInfo.driverStatus)
           wx.showToast({
             title: '上岗成功',
             icon: 'none'
           })
         } else if (app.globalData.driverInfo.driverStatus == 1){
-          console.log('下岗')
           app.globalData.driverInfo.driverStatus = 0
+          console.log('下岗status:', app.globalData.driverInfo.driverStatus)
           wx.showToast({
-            title: '已下岗',
+            title: '下岗成功',
             icon: 'none'
           })
         }    

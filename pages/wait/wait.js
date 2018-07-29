@@ -48,7 +48,7 @@ onLoad: function(){
       console.log('收到服务器内容：', res)
       res = JSON.parse(res.data)
 
-      if (res.status === 1){
+      if (res.status === 1){//接到单
         app.globalData.passengerInfo = res.result.passenger
         // console.log('wait:', res.result.passenger)
         app.globalData.currOrderInfo = res.result.order
@@ -58,6 +58,7 @@ onLoad: function(){
 
         console.log('res订单信息目的地：', res.result.order.endLocation)
         console.log('wait app订单信息目的地：', app.globalData.currOrderInfo.endLocation)
+        clearInterval(this.countTimer);
         wx.redirectTo({
           url: `/pages/orderService/orderService`,
         })
@@ -84,26 +85,15 @@ onUnload: function(){
 countInterval: function () {
    var curr = 0;
     var timer = new Date(0,0);
-    var  randomTime = Math.floor(1000*Math.random()) ;
   this.countTimer = setInterval(() => {
-    if (this.data.count <= randomTime) {
-      this.setData({
-              time: this.parseTime(timer.getMinutes())+":"+this.parseTime(timer.getSeconds()),
-          });
-          timer.setMinutes(curr/60);
-                timer.setSeconds(curr%60);
-                curr++;
-       this.drawProgress(this.data.count / (60/2))
-      this.data.count++;
-    } else {
-      this.setData({
-        progress_txt: "匹配成功"
-      }); 
-      wx.redirectTo({
-          url:  "/pages/orderService/orderService",
-        });
-      clearInterval(this.countTimer);
-    }
+    this.setData({
+      time: this.parseTime(timer.getMinutes())+":"+this.parseTime(timer.getSeconds()),
+    });
+    timer.setMinutes(curr/60);
+    timer.setSeconds(curr%60);
+    curr++;
+    this.drawProgress(this.data.count / (60/2))
+    this.data.count++;
   }, 1000)
 },
 drawProgressbg: function(){

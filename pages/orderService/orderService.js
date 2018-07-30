@@ -94,7 +94,7 @@ Page({
   // 页面显示
   onShow(){
 
-      // 订单中司机位置
+      // 订单中实时发送司机位置
       wx.getLocation({
         type: "gcj02",
         success: (res) => {
@@ -117,7 +117,7 @@ Page({
             let larr = location.split(',');
             let longitude = larr[0];
             let latitude = larr[1];
-            if (res.longitude - longitude < 0.002325 || res.latitude - latitude > 0.002375){
+            if (Math.abs(res.longitude - longitude) > 0.002325 || Math.abs(res.latitude - latitude) > 0.002375){
               app.globalData.currOrderInfo.locationInfo += '-' + res.longitude + ',' + res.latitude
               console.log('locationInfo:', app.globalData.currOrderInfo.locationInfo)
             }
@@ -194,6 +194,7 @@ Page({
     })  
 
   },
+  // 改变状态（接到乘客 到达目的地）
   changeState(e){
     let _this = this
     let userId = app.globalData.driverInfo.driverId

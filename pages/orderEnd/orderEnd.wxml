@@ -11,12 +11,9 @@
                 </view>
             </view>
             <view class="driver-message">
-                    <!-- <view class="mas">
-                            <image style="width: 70rpx;height: 70rpx;" src="../../assets/images/msm.png"/>
-                        </view> -->
-                        <view class="phone">
-                            <image style="width: 70rpx;height: 70rpx;" src="../../assets/images/phone.png"/>
-                        </view>
+              <view class="phone"  bindtap='calling'>
+                <image style="width: 70rpx;height: 70rpx;" src="../../assets/images/phone.png"/>
+              </view>
             </view>
           
         </view>

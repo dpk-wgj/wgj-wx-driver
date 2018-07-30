@@ -52,5 +52,18 @@ Page({
       })
     },2000)
    
+  },
+  // 拨打电话
+  calling(){
+    wx.makePhoneCall({
+      // phoneNumber: this.phone,
+      phoneNumber: app.globalData.passengerInfo.passengerPhoneNumber,
+      success: function () {
+        console.log("拨打电话成功")
+      },
+      fail: function () {
+        console.log("拨打电话失败")
+      }
+    })
   }
 });

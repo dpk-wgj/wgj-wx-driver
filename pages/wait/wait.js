@@ -27,7 +27,6 @@ onLoad: function(){
     console.log(app.globalData.socketOpen)
     if (!app.globalData.socketOpen){
       wx.onSocketError(function (res) {
-        app
         app.globalData.socketOpen = false
         console.log('WebSocket连接打开失败，请检查！')
       })

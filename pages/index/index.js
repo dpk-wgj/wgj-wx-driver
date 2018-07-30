@@ -27,8 +27,6 @@ Page({
           url: '/pages/authorization/authorization',
         })
       }
-      this.requestCart();
-      this.requestWaitingtime();
     },
     // 点击用户
     showUser() {
@@ -45,12 +43,6 @@ Page({
         })
       }
     },
-    getOrderList(e){
-      wx.redirectTo({
-        url: '/pages/orderList/orderList',
-      })
-    },
-    requestCart(e){},
     onShow(){
       
         this.setData({
@@ -58,8 +50,68 @@ Page({
             destination:app.globalData.destination,
             currentTab:app.globalData.id,
         })
+      // 上岗时实时传送位置
+      setTimeout(function () {
+        console.log('index司机信息：', app.globalData.driverInfo.driverStatus)
+        if (app.globalData.driverInfo.driverStatus == 1) {
+          wx.getLocation({
+            type: "gcj02",
+            success: (res) => {
+              // console.log("获取司机经纬度", res)
+              app.globalData.driverInfo.driverLocation = res.longitude + ',' + res.latitude
+              // let str = app.globalData.driverInfo.driverLocation
+              // let arr = str.split(',')
+              // let longitude = arr[0]
+              // let latitude = arr[1]
+              // if (res.longitude - longitude != 0 || res.latitude - latitude != 0){
+                let param3 = {
+                  driverId: app.globalData.driverInfo.driverId,
+                  driverLocation: res.longitude + ',' + res.latitude,
+                  driverStatus: 1
+                }
+                console.log("上传司机经纬度", param3)
+                util.request({
+                  url: `${app.globalData.baseUrl}/api/driver/updateApiDriverInfoByDriverId`,
+                  method: "post",
+                  data: param3
+                }).then(res3 => {
+                  // console.log('司机位置更新：',res3)
+                })
+              // }
+            }
+          })
+          let t = 0
+          this.socketTimer = setInterval(() => {
+            t++;
+            wx.getLocation({
+              type: "gcj02",
+              success: (res) => {
+                // console.log("获取司机经纬度", res)
+                let str = app.globalData.driverInfo.driverLocation
+                let arr = str.split(',')
+                let longitude = arr[0]
+                let latitude = arr[1]
+                if (res.longitude - longitude != 0 || res.latitude - latitude != 0) {
+                  let param3 = {
+                    driverId: app.globalData.driverInfo.driverId,
+                    driverLocation: res.longitude + ',' + res.latitude,
+                    driverStatus: 1
+                  }
+                  console.log("上传司机经纬度", param3)
+                  util.request({
+                    url: `${app.globalData.baseUrl}/api/driver/updateApiDriverInfoByDriverId`,
+                    method: "post",
+                    data: param3
+                  }).then(res3 => {
+                    // console.log('司机位置更新：',res3)
+                  })
+                }
+              }
+            })
+          }, 60000)
+        }
+      }, 2000)
     },
-    requestWaitingtime(){},
    
     // 点击出车
     startDrive(e){
@@ -74,91 +126,23 @@ Page({
           title: '请稍后再操作',
           icon: 'none'
         })
-      } else if (app.globalData.driverInfo.driverPhoneNumber == null){
-        wx.showToast({
-          title: '未绑定手机号',
-          icon: 'none',
-          mask: true,
-          success: function (e) {
-            setTimeout(function () {
-              wx.redirectTo({
-                url: `/pages/login/login`,
-              })
-            }, 1000);
-          }
-        })
       } else{
-        let params = {
-          "driverId": app.globalData.driverInfo.driverId,
-          "driverWxId": app.globalData.driverInfo.driverWxId,
-          "driverStatus": 1
-        }
-        util.request({
-          url: `${app.globalData.baseUrl}/api/driver/updateApiDriverInfoByDriverId`,
-          data: params,
-          method: 'post'
-        }).then((res) => {
-          console.log(res)
-          if (res.status === 1) {
-            wx.navigateTo({
-              url: "/pages/wait/wait",
-            })
-
-          }
-
+        wx.navigateTo({
+          url: "/pages/wait/wait",
         })
       }
-      
-      // const destination =this.data.destination
-      // if(destination==''){
-      //   wx.showToast({
-      //       title: '目的地不能为空',
-      //       icon: 'fail',
-      //      mask: true,
-      //       duration: 1000
-      //     })
-      // }else{
 
-      //   let {endLatitude,endLongitude} = app.globalData
-      //   qqmapsdk.calculateDistance({
-      //       mode: 'driving',
-      //       to:[ {
-      //         latitude: endLatitude,
-      //         longitude:endLongitude
-      //     }],
-      //     success: (res)=> {
-      //       // console.log(res.result.elements[0].distance)
-      //       var num1 = 8+1.9*(res.result.elements[0].distance/1000)
-      //       var num2= 12+1.8*(res.result.elements[0].distance/1000)
-      //       var num3= 16+2.9*(res.result.elements[0].distance/1000)
-      //       var play1 = num1.toFixed(1)
-      //       var play2 = num2.toFixed(1)
-      //       var play3 = num3.toFixed(1)
-      //       this.setData({
-      //           play1:play1,
-      //           play2:play2,
-      //           play3:play3,
-      //       })
-      //     },
-         
-      //     });
-      //   this.setData({
-        
-      //       callCart: false
-      //   })
-      // }
-        
-       
     },
-  toWait(e){
-   
-    wx.reLaunch({
-        url:  "/pages/wait/wait",
-    }),
-    wx.setTopBarText({
-        text: '等待应答'
-        })
-  },
+    // 出车
+    toWait(e){
+      wx.reLaunch({
+          url:  "/pages/wait/wait",
+      }),
+      wx.setTopBarText({
+          text: '等待应答'
+          })
+    },
+    
     switchNav(event){
      
         this.requestWaitingtime();

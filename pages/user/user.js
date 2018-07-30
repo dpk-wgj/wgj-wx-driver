@@ -68,7 +68,7 @@ Page({
     })
   },
 
-  // 扫一扫
+  // 扫码上岗
   scanCode: function () {
     var that = this
     // wx.scanCode({

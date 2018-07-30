@@ -164,15 +164,15 @@ Page({
       confirmColor: '#fc9c56',
       success: function (res) {
         if (res.confirm) {
-
           _this.sendSocketMessage('driver,changeDriver')
           wx.onSocketMessage(function (res) {
-
+            console.log('改派：',res)
             res = JSON.parse(res.data)
             console.log('收到服务器内容：' + res.status)
             if(res.status === 3){
-                  
-              let params = { "orderId": app.globalData.currOrderInfo.orderId }
+              let params = { 
+                "orderId": app.globalData.currOrderInfo.orderId 
+              }
               util.request({
                 url: `${app.globalData.baseUrl}/api/driver/updateOrderInfoByOrderId`,
                 method: 'post',
@@ -194,7 +194,7 @@ Page({
     })  
 
   },
-  // 改变状态（接到乘客 到达目的地）
+  // 改变状态（到达上车地点 到达目的地）
   changeState(e){
     let _this = this
     let userId = app.globalData.driverInfo.driverId
@@ -214,7 +214,6 @@ Page({
           var str = app.globalData.currOrderInfo.startLocation
           var arr = str.split(',')
           let targetLocation = arr[1] + ',' + arr[2]
-          _this.sendSocketMessage('driver,arriveToPassenger')
           let params = {
             orderId: app.globalData.currOrderInfo.orderId,
             currentLocation: currentLocation,
@@ -228,7 +227,7 @@ Page({
           }).then(res => {
             console.log("接到乘客：", res)
             if (res.status === 1) {
-              _this.sendSocketMessage('driver,arriveToPassenger')
+              _this.sendSocketMessage('driver,arriveToPassenger')       
               _this.setData({
                 bottomText: '到达目的地',
                 isAccessPassenger: true
@@ -236,7 +235,7 @@ Page({
               wx.showToast({
                 title: '您已成功接到乘客',
                 icon: 'success',
-                duration: 3000
+                duration: 2000
               })
             } else if (res.status === 0){
               wx.showToast({
@@ -285,11 +284,11 @@ Page({
           }).then(res => {
             console.log("到达目的地：", res)
             if (res.status === 1) {
-              wx.onSocketMessage(function (res) {
-                res = JSON.parse(res.data)
-                // res.status === 2  取消订单
-                // console.log('收到服务器内容（到达目的地）：' + res.data)
-              })
+              // wx.onSocketMessage(function (res) {
+              //   res = JSON.parse(res.data)
+              //   // res.status === 2  取消订单
+              //   // console.log('收到服务器内容（到达目的地）：' + res.data)
+              // })
               _this.sendSocketMessage('driver,arriveToDest')
 
               wx.closeSocket()
@@ -304,7 +303,7 @@ Page({
                 method: 'post',
                 data: p
               }).then(res => {
-                console.log('到达目的地改变订单信息', res)
+                console.log('到达目的地订单信息', res)
                 app.globalData.currOrderInfo = res.result.order.orderInfo
                 console.log('到达目的地后res.orderinfo：', res.result.order.orderInfo)
                 console.log('到达目的地后app.orderinfo：', app.globalData.currOrderInfo)
@@ -324,19 +323,19 @@ Page({
     }
   },
   // 结束行程
-  endOrder(){
-    wx.closeSocket({
-      success: function(res){
-        console.log("关闭了socket",res)
-      },
-      complete: function (res) {
-        console.log("关闭了socket", res)
-      },
-    })
-    // wx.redirectTo({
-    //   url:"/pages/evaluation/evaluation",
-    // })  
-    },
+  // endOrder(){
+  //   wx.closeSocket({
+  //     success: function(res){
+  //       console.log("关闭了socket",res)
+  //     },
+  //     complete: function (res) {
+  //       console.log("关闭了socket", res)
+  //     },
+  //   })
+  //   // wx.redirectTo({
+  //   //   url:"/pages/evaluation/evaluation",
+  //   // })  
+  //   },
   onReady: function () {
     wx.getLocation({
       type: "gcj02",
@@ -355,11 +354,6 @@ Page({
 
   bindregionchange: (e) => {
 
-  },
-  toCancel() {
-    wx.redirectTo({
-      url: "/pages/cancel/cancel"
-    })
   },
   // 拨打电话
   calling: function () {

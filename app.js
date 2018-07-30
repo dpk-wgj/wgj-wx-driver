@@ -6,6 +6,7 @@ qqmapsdk = new QQMapWX({
 });
 App({
   onLaunch: function () {
+    var that = this
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
@@ -32,11 +33,55 @@ App({
               console.log('res2:',res2)
               if(res2.status == -1){
                 wx.navigateTo({
-                  url: '/pages/login/login',
+                  url: '/pages/login/login?first=true',
                 })
               } else if (res2.status === 1) {
                 this.globalData.driverInfo = res2.result.driverInfo
                 console.log("后台请求登录：", this.globalData.driverInfo)
+                // console.log('driverId:', this.globalData.driverInfo.driverId)
+                // 实时发送位置
+                wx.getLocation({
+                  type: "gcj02",
+                  success: function(res) {
+                    // console.log("获取司机经纬度", res)
+                    let param3 = {
+                      driverId: that.globalData.driverInfo.driverId,
+                      driverLocation: res.longitude + ',' + res.latitude,
+                      driverStatus: 1
+                    }
+                    console.log("上传司机经纬度", param3)
+                    util.request({
+                      url: `${that.globalData.baseUrl}/api/driver/updateApiDriverInfoByDriverId`,
+                      method: "post",
+                      data: param3
+                    }).then(res3 => {
+                      // console.log('司机位置更新：',res3)
+                    })
+                  },
+                })
+                let t = 0
+                this.socketTimer = setInterval(() => {
+                  t++;
+                  wx.getLocation({
+                    type: "gcj02",
+                    success: (res) => {
+                      // console.log("获取司机经纬度", res)
+                        let param3 = {
+                          driverId: this.globalData.driverInfo.driverId,
+                          driverLocation: res.longitude + ',' + res.latitude,
+                          driverStatus: 1
+                        }
+                        console.log("上传司机经纬度", param3)
+                        // util.request({
+                        //   url: `${this.globalData.baseUrl}/api/driver/updateApiDriverInfoByDriverId`,
+                        //   method: "post",
+                        //   data: param3
+                        // }).then(res3 => {
+                        //   // console.log('司机位置更新：',res3)
+                        // })
+                    }
+                  })
+                },60000)
               }
             })
           }    
@@ -51,6 +96,7 @@ App({
     baseWsUrl: 'ws://120.79.251.229:8000',
     // baseUrl: 'http://localhost:8000',
     // baseWsUrl: 'ws://localhost:8000',
+    employId: '',
     userInfo: null, 
     socketOpen: false,
     socketMsgQueue: [],

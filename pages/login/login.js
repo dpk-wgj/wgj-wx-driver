@@ -29,6 +29,11 @@ Page({
         change: options.change
       })
     }
+    if (options.first){
+      this.setData({
+        first: options.first
+      })
+    }
   },
   testPhone: function (s) {
     if (s != null && s) {
@@ -165,7 +170,7 @@ Page({
     // console.log('this.data.phone:',this.data.phone)
     // app.globalData.driverInfo.driverPhoneNumber = this.data.phone
     // console.log('app:', app.globalData.driverInfo)
-
+    var that = this
     if(this.data.change){
       let param = {
         randomNum: this.data.code
@@ -227,54 +232,54 @@ Page({
             if (res2.status === 1) {
               app.globalData.driverInfo = res2.result.driverInfo
               console.log('app:', app.globalData.driverInfo)
-              wx.getLocation({
-                type: "gcj02",
-                success: (res) => {
-                  // console.log("获取司机经纬度", res)
-                  let param3 = {
-                    driverId: app.globalData.driverInfo.driverId,
-                    driverLocation: res.longitude + ',' + res.latitude,
-                    driverStatus: 1
-                  }
-                  // console.log("上传司机经纬度", param3)
-                  util.request({
-                    url: `${app.globalData.baseUrl}/api/driver/updateApiDriverInfoByDriverId`,
-                    method: "post",
-                    data: param3
-                  }).then(res3 => {
-                    console.log('司机位置更新：', res3)
-                  })
-                }
-              })
-              let t = 0
-              this.socketTimer = setInterval(() => {
-                t++;
-                wx.getLocation({
-                  type: "gcj02",
-                  success: (res) => {
-                    console.log("获取司机经纬度", res)
-                    let param3 = {
-                      driverId: app.globalData.driverInfo.driverId,
-                      driverLocation: res.longitude + ',' + res.latitude,
-                      driverStatus: 1
-                    }
-                    // console.log("上传司机经纬度", param3)
-                    util.request({
-                      url: `${app.globalData.baseUrl}/api/driver/updateApiDriverInfoByDriverId`,
-                      method: "post",
-                      data: param3
-                    }).then(res3 => {
-                      // console.log('司机位置更新：',res3)
-                    })
-                  }
-                })
-              }, 60000)
+              // wx.getLocation({
+              //   type: "gcj02",
+              //   success: (res) => {
+              //     // console.log("获取司机经纬度", res)
+              //     let param3 = {
+              //       driverId: app.globalData.driverInfo.driverId,
+              //       driverLocation: res.longitude + ',' + res.latitude,
+              //       driverStatus: 1
+              //     }
+              //     // console.log("上传司机经纬度", param3)
+              //     util.request({
+              //       url: `${app.globalData.baseUrl}/api/driver/updateApiDriverInfoByDriverId`,
+              //       method: "post",
+              //       data: param3
+              //     }).then(res3 => {
+              //       console.log('司机位置更新：', res3)
+              //     })
+              //   }
+              // })
+              // let t = 0
+              // this.socketTimer = setInterval(() => {
+              //   t++;
+              //   wx.getLocation({
+              //     type: "gcj02",
+              //     success: (res) => {
+              //       console.log("获取司机经纬度", res)
+              //       let param3 = {
+              //         driverId: app.globalData.driverInfo.driverId,
+              //         driverLocation: res.longitude + ',' + res.latitude,
+              //         driverStatus: 1
+              //       }
+              //       // console.log("上传司机经纬度", param3)
+              //       util.request({
+              //         url: `${app.globalData.baseUrl}/api/driver/updateApiDriverInfoByDriverId`,
+              //         method: "post",
+              //         data: param3
+              //       }).then(res3 => {
+              //         // console.log('司机位置更新：',res3)
+              //       })
+              //     }
+              //   })
+              // }, 60000)
             }
 
           })
           setTimeout(function () {
             wx.navigateTo({
-              url: '/pages/index/index',
+              url: '/pages/index/index?first=' + that.data.first,
             })
           }, 2000)
         } else if (res.result == null) {

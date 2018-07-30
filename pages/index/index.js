@@ -19,12 +19,18 @@ Page({
         destination: '',
         bluraddress : '',
         index: '',
+        first: false
     },
     onLoad: function(options) {
       // console.log("index.js")
       if (!wx.getStorageSync('userInfo')){
         wx.redirectTo({
           url: '/pages/authorization/authorization',
+        })
+      }
+      if (options.first){
+        this.setData({
+          first: options.first
         })
       }
     },
@@ -45,6 +51,7 @@ Page({
     },
     onShow(){
       
+      var that = this
         this.setData({
             address:app.globalData.bluraddress,
             destination:app.globalData.destination,
@@ -52,18 +59,20 @@ Page({
         })
       // 上岗时实时传送位置
       setTimeout(function () {
-        console.log('index司机信息：', app.globalData.driverInfo.driverStatus)
-        if (app.globalData.driverInfo.driverStatus == 1) {
-          wx.getLocation({
-            type: "gcj02",
-            success: (res) => {
-              // console.log("获取司机经纬度", res)
-              app.globalData.driverInfo.driverLocation = res.longitude + ',' + res.latitude
-              // let str = app.globalData.driverInfo.driverLocation
-              // let arr = str.split(',')
-              // let longitude = arr[0]
-              // let latitude = arr[1]
-              // if (res.longitude - longitude != 0 || res.latitude - latitude != 0){
+        // console.log('show:', app.globalData.driverInfo)
+        // console.log('index司机信息：', app.globalData.driverInfo.driverStatus)
+        if (that.data.first){
+          if (app.globalData.driverInfo.driverStatus == 1) {
+            wx.getLocation({
+              type: "gcj02",
+              success: (res) => {
+                // console.log("获取司机经纬度", res)
+                app.globalData.driverInfo.driverLocation = res.longitude + ',' + res.latitude
+                // let str = app.globalData.driverInfo.driverLocation
+                // let arr = str.split(',')
+                // let longitude = arr[0]
+                // let latitude = arr[1]
+                // if (res.longitude - longitude != 0 || res.latitude - latitude != 0){
                 let param3 = {
                   driverId: app.globalData.driverInfo.driverId,
                   driverLocation: res.longitude + ',' + res.latitude,
@@ -77,39 +86,40 @@ Page({
                 }).then(res3 => {
                   // console.log('司机位置更新：',res3)
                 })
-              // }
-            }
-          })
-          let t = 0
-          this.socketTimer = setInterval(() => {
-            t++;
-            wx.getLocation({
-              type: "gcj02",
-              success: (res) => {
-                // console.log("获取司机经纬度", res)
-                let str = app.globalData.driverInfo.driverLocation
-                let arr = str.split(',')
-                let longitude = arr[0]
-                let latitude = arr[1]
-                if (res.longitude - longitude != 0 || res.latitude - latitude != 0) {
-                  let param3 = {
-                    driverId: app.globalData.driverInfo.driverId,
-                    driverLocation: res.longitude + ',' + res.latitude,
-                    driverStatus: 1
-                  }
-                  console.log("上传司机经纬度", param3)
-                  util.request({
-                    url: `${app.globalData.baseUrl}/api/driver/updateApiDriverInfoByDriverId`,
-                    method: "post",
-                    data: param3
-                  }).then(res3 => {
-                    // console.log('司机位置更新：',res3)
-                  })
-                }
+                // }
               }
             })
-          }, 60000)
-        }
+            let t = 0
+            this.socketTimer = setInterval(() => {
+              t++;
+              wx.getLocation({
+                type: "gcj02",
+                success: (res) => {
+                  // console.log("获取司机经纬度", res)
+                  let str = app.globalData.driverInfo.driverLocation
+                  let arr = str.split(',')
+                  let longitude = arr[0]
+                  let latitude = arr[1]
+                  if (res.longitude - longitude != 0 || res.latitude - latitude != 0) {
+                    let param3 = {
+                      driverId: app.globalData.driverInfo.driverId,
+                      driverLocation: res.longitude + ',' + res.latitude,
+                      driverStatus: 1
+                    }
+                    console.log("上传司机经纬度", param3)
+                    util.request({
+                      url: `${app.globalData.baseUrl}/api/driver/updateApiDriverInfoByDriverId`,
+                      method: "post",
+                      data: param3
+                    }).then(res3 => {
+                      // console.log('司机位置更新：',res3)
+                    })
+                  }
+                }
+              })
+            }, 60000)
+          }
+        } 
       }, 2000)
     },
    

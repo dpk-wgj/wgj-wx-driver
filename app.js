@@ -23,7 +23,7 @@ App({
             console.log("登录：", res1)
             this.globalData.openid = res1.openid
             let param = {
-              driverWxId: this.globalData.openid,//this.globalData.openid
+              driverWxId:`yjy`,//this.globalData.openid
             }
             util.request({
               url: `${this.globalData.baseUrl}/public/driver/login`,
@@ -92,10 +92,10 @@ App({
     // 获取用户信息
   },
   globalData: {
-    baseUrl: 'http://120.79.251.229:8000',
-    baseWsUrl: 'ws://120.79.251.229:8000',
-    // baseUrl: 'http://localhost:8000',
-    // baseWsUrl: 'ws://localhost:8000',
+    // baseUrl: 'http://120.79.251.229:8000',
+    // baseWsUrl: 'ws://120.79.251.229:8000',
+    baseUrl: 'http://localhost:8000',
+    baseWsUrl: 'ws://localhost:8000',
     employId: '',
     userInfo: null, 
     socketOpen: false,
